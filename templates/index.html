@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+  <title>Hello there!</title>
+  <body>
+    {% if name %}
+      <h1>Hello {% if img %}<img src="{{ img }}" /> {% endif %}{{ name }}!</h1>
+    {% else %}
+      <h1>Hello Anonymous!</h1>
+    {% endif %}
+    {% if content %}
+      <p>{{ content }}</p>
+    {% else %}
+      <p>We were denied access to your profile :(</p>
+    {% endif %}
+  </body>
+</html>
