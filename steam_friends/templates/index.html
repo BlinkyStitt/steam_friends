@@ -29,48 +29,50 @@
     {% endif %}
   {% endwith %}
 
-  <table id="steamGames" class="table table-hover tablesorter">
-    <thead>
-      <tr>
-        <th>Game</th>
-        <th>Owners</th>
-        {% for u in steam_users.values() | sort %}
-          <th>
-              <img alt="{{ u.steamid }}" class="img-thumbnail pull-left" src="{{ u.avatar }}" />
-              {{ u }}
-          </th>
-        {% endfor %}
-      </tr>
-    </thead>
-    <tbody>
-    {% for g, c in game_counter.most_common() %}
-      {% if c == steam_users | length %}
-        {% set tr_class="success" %}
-      {% elif c == 1 and steam_users | length > 2 %}
-        {% set tr_class="warning" %}
+  <div class="table-responsive">
+    <table id="steamGames" class="table table-hover tablesorter">
+      <thead>
+        <tr>
+          <th>Game</th>
+          <th>Owners</th>
+          {% for u in steam_users.values() | sort %}
+            <th>
+                <img alt="{{ u.steamid }}" class="img-thumbnail pull-left" src="{{ u.avatar }}" />
+                {{ u }}
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+      {% for g, c in game_counter.most_common() %}
+        {% if c == steam_users | length %}
+          {% set tr_class="success" %}
+        {% elif c == 1 and steam_users | length > 2 %}
+          {% set tr_class="warning" %}
+        {% else %}
+          {% set tr_class="" %}
+        {% endif %}
+        <tr class="{{ tr_class }}">
+          <td><img class="img-thumbnail pull-left" src="{{ g.img_icon_url }}" />{{ g }}</td>
+          <td>{{ c }}</td>
+          {% for u in steam_users.values() | sort %}
+            <td>
+              {% if g in u.games %}
+                <span class="glyphicon glyphicon-play"></span>
+              {% else %}
+                <span class="glyphicon glyphicon-download"></span>
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
       {% else %}
-        {% set tr_class="" %}
-      {% endif %}
-      <tr class="{{ tr_class }}">
-        <td><img class="img-thumbnail pull-left" src="{{ g.img_icon_url }}" />{{ g }}</td>
-        <td>{{ c }}</td>
-        {% for u in steam_users.values() | sort %}
-          <td>
-            {% if g in u.games %}
-              <span class="glyphicon glyphicon-play"></span>
-            {% else %}
-              <span class="glyphicon glyphicon-download"></span>
-            {% endif %}
-          </td>
-        {% endfor %}
-      </tr>
-    {% else %}
-      <tr class="danger">
-        <td colspan="{{ 2 + steam_users | length }}">No games in common :(</td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
+        <tr class="danger">
+          <td colspan="{{ 2 + steam_users | length }}">No games in common :(</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
   {% if failed_steamid64s %}
     <h2>Failed Querying</h2>
