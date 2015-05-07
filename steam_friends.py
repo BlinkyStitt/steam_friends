@@ -1,3 +1,4 @@
+import collections
 import os
 
 import flask
@@ -46,43 +47,46 @@ def index():
     steamapi.core.APIConnection(api_key=STEAM_API_KEY)
 
     # todo: this should be from a form
-    people = [
+    users = [
+        'nynjawitaynynjawitaynynjawitay',
         'ARizzo',
         'nynjawitay',
         '76561197969428769',  # Son of Themis
         '76561197979664690',  # JC
     ]
+    app.logger.info("checking users: %r", users)
 
-    steam_names = []
-    # todo: counter for games instead of a hard set
-    common_games = None
+    steam_users = []
+    failed_steam_users = []
+    game_counter = collections.Counter()
 
-    for name in people:
-        app.logger.debug("Checking name: %s", name)
-
-        try:
-            steam_user = steamapi.user.SteamUser(userid=int(name))
-        except ValueError:
-            steam_user = steamapi.user.SteamUser(userurl=name)
-        app.logger.debug("steam_user: %r", steam_user)
+    for user_id in users:
+        app.logger.debug("Checking user_id: %s", user_id)
 
         try:
-            game_names = [g.name for g in steam_user.games]
+            steam_user = steamapi.user.SteamUser(userid=int(user_id))
+        except (steamapi.user.UserNotFoundError, ValueError):
+            try:
+                steam_user = steamapi.user.SteamUser(userurl=user_id)
+            except steamapi.user.UserNotFoundError:
+                app.logger.warning("User not found: %s", user_id)
+                failed_steam_users.append(user_id)
+                continue
+        try:
+            game_counter.update(steam_user.games)
         except steamapi.errors.APIUnauthorized:
-            app.logger.exception("Unable to query user data")
+            app.logger.exception("Access denied querying game list: %s", user_id)
+            failed_steam_users.append(user_id)
             continue
 
-        if common_games is None:
-            common_games = set(game_names)
-        else:
-            # todo: debug prints?
-            common_games = common_games.intersection(game_names)
+        steam_users.append(steam_user)
 
-        steam_names.append(steam_user.name)
-
-    app.logger.debug("common games: %r", common_games)
-
-    return flask.render_template('index.html', steam_names=steam_names, common_games=common_games)
+    return flask.render_template(
+        'index.html',
+        failed_steam_users=failed_steam_users,
+        game_counter=game_counter,
+        steam_users=steam_users,
+    )
 
 
 if __name__ == '__main__':
