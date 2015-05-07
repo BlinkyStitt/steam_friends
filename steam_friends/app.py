@@ -1,74 +1,12 @@
 import collections
-import os
 
 import flask
 import steam.api
 
-
-if not os.environ.get("STEAMODD_API_KEY"):
-    raise ValueError("You must export STEAMODD_API_KEY")
+from steam_friends import models
 
 
 app = flask.Flask(__name__)
-
-
-class SteamApp(object):
-
-    image_url = "http://media.steampowered.com/steamcommunity/public/images/apps/{appid}/{hash}.jpg"
-
-    def __init__(self, **kwargs):
-        self.appid = kwargs['appid']
-        self.name = kwargs['name'].encode('ascii', 'ignore')  # todo: what should we do here?
-        self.img_logo_url = self.image_url.format(
-            appid=self.appid,
-            hash=kwargs['img_logo_url'],
-        )
-        self.img_icon_url = self.image_url.format(
-            appid=self.appid,
-            hash=kwargs['img_icon_url'],
-        )
-        # there are more attributes than this, but we don't need them
-
-    def __eq__(self, other):
-        app.logger.debug("checking equality")
-        return self.appid == other.appid
-
-    def __hash__(self):
-        return hash(self.appid)
-
-    def __repr__(self):
-        return "{cls}(appid={appid}, name={name})".format(
-            cls=self.__class__.__name__,
-            appid=self.appid,
-            name=self.name,
-        )
-
-    def __str__(self):
-        return self.name
-
-
-class SteamUser(object):
-
-    def __init__(self, **kwargs):
-        self.avatar = kwargs['avatar']
-        self.avatarmedium = kwargs['avatarmedium']
-        self.avatarfull = kwargs['avatarfull']
-        self.steamid = kwargs['steamid']
-        self.personaname = kwargs['personaname']
-        self.personastate = kwargs['personastate']
-
-        self.games = []
-
-    def __str__(self):
-        return self.personaname
-
-    def __repr__(self):
-        return "{cls}(steamid='{steamid}', personaname='{personaname}', num_games={num_games})".format(
-            cls=self.__class__.__name__,
-            steamid=self.steamid,
-            personaname=self.personaname,
-            num_games=len(self.games),
-        )
 
 
 @app.route('/')
@@ -90,7 +28,7 @@ def index():
     try:
         users_response = steam.api.interface('ISteamUser').GetPlayerSummaries(steamids=steamid64s, version=2)
         for user_data in users_response['response']['players']:
-            u = SteamUser(**user_data)
+            u = models.SteamUser(**user_data)
             steam_users[u.steamid] = u
     except steam.api.APIError as e:
         app.logger.warning("Steam API Error for users: %s", e)
@@ -100,7 +38,7 @@ def index():
             try:
                 games_response = steam.api.interface('IPlayerService').GetOwnedGames(steamid=u.steamid, include_appinfo=1)
                 for game_data in games_response['response']['games']:
-                    g = SteamApp(**game_data)
+                    g = models.SteamApp(**game_data)
                     u.games.append(g)
                     game_counter[g] += 1
             except steam.api.APIError as e:
