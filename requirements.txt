@@ -1,2 +1,2 @@
 Flask
-git+https://github.com/smiley/steamapi.git
+steamodd

@@ -34,21 +34,27 @@
       <tr>
         <th>Game</th>
         <th>Owners</th>
-        {% for u in steam_users | sort %}
-          <th>{{ u }}</th>
+        {% for u in steam_users.values() | sort %}
+          <th>
+              <img alt="{{ u.steamid }}" class="img-thumbnail pull-left" src="{{ u.avatar }}" />
+              {{ u }}
+          </th>
         {% endfor %}
       </tr>
     </thead>
     <tbody>
-    {% for g, c in game_counter.most_common() if c > 1 %}
+    {% for g, c in game_counter.most_common() %}
       {% if c == steam_users | length %}
-      <tr class="success">
+        {% set tr_class="success" %}
+      {% elif c == 1 and steam_users | length > 2 %}
+        {% set tr_class="warning" %}
       {% else %}
-      <tr>
+        {% set tr_class="" %}
       {% endif %}
-        <td>{{ g }}</td>
+      <tr class="{{ tr_class }}">
+        <td><img class="img-thumbnail pull-left" src="{{ g.img_icon_url }}" />{{ g }}</td>
         <td>{{ c }}</td>
-        {% for u in steam_users | sort %}
+        {% for u in steam_users.values() | sort %}
           <td>
             {% if g in u.games %}
               <span class="glyphicon glyphicon-play"></span>
@@ -58,28 +64,32 @@
           </td>
         {% endfor %}
       </tr>
+    {% else %}
+      <tr class="danger">
+        <td colspan="{{ 2 + steam_users | length }}">No games in common :(</td>
+      </tr>
     {% endfor %}
     </tbody>
   </table>
 
-  <h2>Failed Querying</h2>
+  {% if failed_steamid64s %}
+    <h2>Failed Querying</h2>
 
-  <ul>
-  {% for u in failed_steam_users %}
-    <li>{{ u }}</li>
-  {% else %}
-    <li>No users :)</li>
-  {% endfor %}
-  </ul>
+    <ul>
+    {% for u in failed_steamid64s %}
+      <li>{{ u }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script src="https://raw.githubusercontent.com/christianbach/tablesorter/master/jquery.tablesorter.min.js"></script>
 <script>
-$(document).ready(function() {
-  $("#steamGames").tablesorter();
-});
+  $(document).ready(function() {
+    $("#steamGames").tablesorter();
+  });
 </script>
 
 </body>
