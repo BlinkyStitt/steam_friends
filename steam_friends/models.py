@@ -1,3 +1,6 @@
+import steam.api
+
+
 class SteamApp(object):
 
     image_url = "http://media.steampowered.com/steamcommunity/public/images/apps/{appid}/{hash}.jpg"
@@ -54,3 +57,11 @@ class SteamUser(object):
             personaname=self.personaname,
             num_games=len(self.games),
         )
+
+    @classmethod
+    def id_to_id64(cls, steamid):
+        r = steam.api.interface('ISteamUser').ResolveVanityURL(vanityurl=steamid)
+        try:
+            return r['response']['steamid']
+        except (KeyError, steam.api.HTTPError):
+            return None
