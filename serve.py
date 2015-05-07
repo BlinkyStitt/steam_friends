@@ -17,4 +17,7 @@ if __name__ == '__main__':
     if os.environ.get("STEAM_FRIENDS_DEBUG"):
         app.debug = True
 
-    app.run()
+    host = os.environ.get("STEAM_FRIENDS_HOST", "127.0.0.1")
+    port = int(os.environ.get("STEAM_FRIENDS_PORT", 10000))
+
+    app.run(host=host, port=port)
