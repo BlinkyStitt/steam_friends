@@ -1,16 +1,38 @@
 <!doctype html>
 <html>
-  <title>Hello there!</title>
+  <title>Steam Friends</title>
   <body>
-    {% if name %}
-      <h1>Hello {% if img %}<img src="{{ img }}" /> {% endif %}{{ name }}!</h1>
+    <h1>Steam Friends!</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <h2>People</h2>
+
+    <ul>
+    {% for name in steam_names %}
+      <li>{{ name }}</li>
     {% else %}
-      <h1>Hello Anonymous!</h1>
-    {% endif %}
-    {% if content %}
-      <p>{{ content }}</p>
+      <li>No names :'(</li>
+    {% endfor %}
+    </ul>
+
+    <h2>Common Games</h2>
+
+    <ul>
+    {% for game in common_games %}
+      <li>{{ game }}</li>
     {% else %}
-      <p>We were denied access to your profile :(</p>
-    {% endif %}
+      <li>No games :'(</li>
+    {% endfor %}
+    </ul>
+
   </body>
 </html>
