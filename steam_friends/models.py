@@ -46,6 +46,7 @@ class SteamUser(object):
         self.personastate = kwargs['personastate']
 
         self.games = []
+        self.friends = []
 
     def __str__(self):
         return self.personaname
