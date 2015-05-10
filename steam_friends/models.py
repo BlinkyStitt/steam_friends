@@ -71,11 +71,14 @@ class SteamUser(object):
     @property
     def friends(self, relationship='friend'):
         if self._friends is None:
+            f = []
+
+            # todo: only lookup friends that aren't in our cache
+
             friends_response = steam.api.interface('ISteamUser').GetFriendList(
                 steamid=self.steamid,
                 relationship=relationship,
             )
-            f = []
             try:
                 for friends_data in friends_response['friendslist']['friends']:
                     f.append(friends_data['steamid'])
@@ -87,12 +90,15 @@ class SteamUser(object):
     @property
     def games(self, include_appinfo=1, include_played_free_games=1):
         if self._games is None:
+            g = []
+
+            # todo: only lookup games that aren't in our cache
+
             games_response = steam.api.interface('IPlayerService').GetOwnedGames(
                 steamid=self.steamid,
                 include_appinfo=include_appinfo,
                 include_played_free_games=include_played_free_games,
             )
-            g = []
             if games_response['response'] == {}:
                 flask.current_app.logger.warning("Failed fetching games for %s", self)
             else:
@@ -102,12 +108,19 @@ class SteamUser(object):
         return self._games
 
     @classmethod
+    def get_user(cls, steamid64):
+        return cls.get_users(steamid64)[0]
+
+    @classmethod
     def get_users(cls, steamid64s):
+        steam_users = []  # todo: maybe make this a dict
+
+        # todo: only lookup users that aren't in our cache
+
         users_response = steam.api.interface('ISteamUser').GetPlayerSummaries(
             steamids=steamid64s,
             version=2,
         )
-        steam_users = []  # todo: maybe make this a dict
         for user_data in users_response['response']['players']:
             u = cls(**user_data)
             flask.current_app.logger.debug("user: %r", u)
@@ -115,7 +128,14 @@ class SteamUser(object):
         return steam_users
 
     @classmethod
+    def id_from_openid(cls, claim_id):
+        if not claim_id.startswith('http://steamcommunity.com/openid/id/'):
+            raise ValueError("claim_id not from steamcommunity.com")
+        return claim_id[len('http://steamcommunity.com/openid/id/'):]
+
+    @classmethod
     def id_to_id64(cls, steamid):
+        # todo: cache this
         r = steam.api.interface('ISteamUser').ResolveVanityURL(vanityurl=steamid)
         try:
             return r['response']['steamid']

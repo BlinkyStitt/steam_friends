@@ -3,7 +3,7 @@ import os
 
 from werkzeug.contrib import fixers
 
-from steam_friends import views
+from steam_friends import ext, views
 
 
 def create_app():
@@ -25,6 +25,8 @@ def create_app():
 
     if os.environ.get("STEAM_FRIENDS_PROXY_FIX") == "1":
         app.wsgi_app = fixers.ProxyFix(app.wsgi_app)
+
+    ext.oid.init_app(app)
 
     app.register_blueprint(views.blueprint)
 
