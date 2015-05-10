@@ -8,8 +8,14 @@ Developing
 $ virtualenv env
 $ . env/bin/activate
 $ pip install -r requirements-dev.txt
+$ npm install && bower install
+
+$ cd static
+$ grunt
+
 $ STEAMODD_API_KEY=X STEAM_FRIENDS_SECRET_KEY=Y STEAM_FRIENDS_DEBUG=1 ./serve.py
 
+$ open http://127.0.0.1:10000/
 
 Testing
 ----------
