@@ -5,6 +5,8 @@
 {% block body %}
 <h1>Steam Friends!</h1>
 
+<a href="{{ url_for('steam_friends.login') }}">Login</a>
+
 <form method="GET">
   <textarea class="form-control" name="ids_and_names" placeholder="Space-separated list of steamids (the profile name on steamcommunity.com, not the login or display name) or steamid64s" rows="2">{{ passed_ids }}</textarea>
   <button type="submit" class="btn btn-default">Compare These Users</button>

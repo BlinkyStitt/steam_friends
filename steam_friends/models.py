@@ -1,6 +1,7 @@
 import flask
-
 import steam.api
+
+from steam_friends.ext import cache
 
 
 class SteamApp(object):
