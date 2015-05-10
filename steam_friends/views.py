@@ -21,8 +21,6 @@ def after_login(resp):
 
 @blueprint.route('/')
 def index():
-    flask.current_app.logger.debug('args: %s', flask.request.args)
-
     game_counter = collections.Counter()
     friend_counter = collections.Counter()
 
@@ -91,7 +89,6 @@ def index():
                 continue
             try:
                 for f in u.friends:
-                    flask.current_app.logger.debug("friend: %r", f)
                     friend_counter[f] += 1
             except steam.api.APIError as e:
                 flask.current_app.logger.warning("Error while querying for games for %s: %s", u, e)
@@ -144,4 +141,4 @@ def lookup_current_user():
 
 @ext.oid.errorhandler
 def on_error(message):
-    flask.flash(u'Error: ' + message)
+    flask.flash(u'Login Error: ' + message, 'warning')
