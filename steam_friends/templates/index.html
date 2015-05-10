@@ -38,7 +38,7 @@
         <tr>
           <th>Game</th>
           <th>Owners</th>
-          {% for u in steam_users.values() | sort %}
+          {% for u in steam_users | sort %}
             <th>
                 <img alt="{{ u.steamid }}" class="img-thumbnail pull-left" src="{{ u.avatar }}" />
                 {{ u }}
@@ -58,7 +58,7 @@
         <tr class="{{ tr_class }}">
           <td><img class="img-thumbnail pull-left" src="{{ g.img_icon_url }}" />{{ g }}</td>
           <td>{{ c }}</td>
-          {% for u in steam_users.values() | sort %}
+          {% for u in steam_users | sort %}
             <td>
               {% if g in u.games %}
                 <span class="glyphicon glyphicon-play"></span>
@@ -81,9 +81,9 @@
     <table id="steamFriends" class="table table-hover tablesorter">
       <thead>
         <tr>
-          <th>Game</th>
+          <th>Friends</th>
           <th>Owners</th>
-          {% for u in steam_users.values() | sort %}
+          {% for u in steam_users | sort %}
             <th>
                 <img alt="{{ u.steamid }}" class="img-thumbnail pull-left" src="{{ u.avatar }}" />
                 {{ u }}
@@ -101,9 +101,12 @@
           {% set tr_class="" %}
         {% endif %}
         <tr class="{{ tr_class }}">
-          <td>{{ f }}</td>
+          <td>
+            <img alt="{{ f.steamid }}" class="img-thumbnail pull-left" src="{{ f.avatar }}" />
+            {{ f }}
+          </td>
           <td>{{ c }}</td>
-          {% for u in steam_users.values() | sort %}
+          {% for u in steam_users | sort %}
             <td>
               {% if f in u.friends %}
                 <span class="glyphicon glyphicon-user"></span>
@@ -129,6 +132,7 @@
 <script>
   $(document).ready(function() {
     $("#steamGames").tablesorter();
+    $("#steamFriends").tablesorter();
   });
 </script>
 

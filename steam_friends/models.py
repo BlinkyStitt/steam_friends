@@ -1,3 +1,5 @@
+import flask
+
 import steam.api
 
 
@@ -68,9 +70,12 @@ class SteamUser(object):
                 relationship=relationship,
             )
             f = []
-            for friends_data in friends_response['friendslist']['friends']:
-                f.append(friends_data['steamid'])
-            self._friends = f
+            try:
+                for friends_data in friends_response['friendslist']['friends']:
+                    f.append(friends_data['steamid'])
+            except steam.api.HTTPError:
+                flask.current_app.logger.warning("Failed fetching friends for %s", self)
+            self._friends = self.get_users(f)
         return self._friends
 
     @property
@@ -82,21 +87,25 @@ class SteamUser(object):
                 include_played_free_games=include_played_free_games,
             )
             g = []
-            for game_data in games_response['response']['games']:
-                g.append(SteamApp(**game_data))
+            if games_response['response'] == {}:
+                flask.current_app.logger.warning("Failed fetching games for %s", self)
+            else:
+                for game_data in games_response['response']['games']:
+                    g.append(SteamApp(**game_data))
             self._games = g
         return self._games
 
     @classmethod
     def get_users(cls, steamid64s):
-        steam_users = {}
         users_response = steam.api.interface('ISteamUser').GetPlayerSummaries(
             steamids=steamid64s,
             version=2,
         )
+        steam_users = []  # todo: maybe make this a dict
         for user_data in users_response['response']['players']:
             u = cls(**user_data)
-            steam_users[u.steamid] = u
+            flask.current_app.logger.debug("user: %r", u)
+            steam_users.append(u)
         return steam_users
 
     @classmethod

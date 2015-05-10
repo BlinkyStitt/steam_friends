@@ -31,10 +31,12 @@ def index():
             if not s:
                 continue
             if s.isnumeric():  # todo: better check
+                steamid64s.append(s)
                 passed_ids.append(s)
             else:
                 steamid64 = models.SteamUser.id_to_id64(s)
                 if steamid64:
+                    steamid64s.append(steamid64)
                     passed_ids.append(steamid64)
                 else:
                     flask.flash("Unable to find steamid64 for {}".format(s), "info")
@@ -62,7 +64,7 @@ def index():
         elif len(steam_users) < 2:
             flask.flash("This app works a lot better with more than 2 users.", "info")
 
-        for u in steam_users.itervalues():
+        for u in steam_users:
             try:
                 for g in u.games:
                     game_counter[g] += 1
@@ -72,6 +74,7 @@ def index():
                 continue
             try:
                 for f in u.friends:
+                    flask.current_app.logger.debug("friend: %r", f)
                     friend_counter[f] += 1
             except steam.api.APIError as e:
                 flask.current_app.logger.warning("Error while querying for games for %s: %s", u, e)
