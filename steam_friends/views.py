@@ -37,7 +37,7 @@ def index():
                 steamid64 = models.SteamUser.id_to_id64(s)
                 if steamid64:
                     steamid64s.append(steamid64)
-                    passed_ids.append(steamid64)
+                    passed_ids.append(s)
                 else:
                     flask.flash("Unable to find steamid64 for {}".format(s), "info")
 
