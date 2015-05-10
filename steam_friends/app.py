@@ -3,11 +3,13 @@ import os
 
 from werkzeug.contrib import fixers
 
-from steam_friends import views
+from steam_friends import ext, views
 
 
 def create_app():
     app = flask.Flask('steam_friends')
+
+    app.config['CACHE_TYPE'] = 'simple'
 
     if not os.environ.get("STEAMODD_API_KEY"):
         # http://steamcommunity.com/dev/apikey
@@ -25,6 +27,9 @@ def create_app():
 
     if os.environ.get("STEAM_FRIENDS_PROXY_FIX") == "1":
         app.wsgi_app = fixers.ProxyFix(app.wsgi_app)
+
+    ext.cache.init_app(app)
+    ext.oid.init_app(app)
 
     app.register_blueprint(views.blueprint)
 

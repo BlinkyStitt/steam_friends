@@ -1,133 +1,121 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Steam Friends</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-</head>
-<body>
+{% extends "layout.html" %}
 
-<div class="container-fluid">
-  <h1>Steam Friends!</h1>
+{% block title %}Steam Friends{% endblock %}
 
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for category, message in messages %}
-        <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
+{% block body %}
+<h1>Steam Friends!</h1>
 
-  <form method="GET">
-    <textarea class="form-control" name="ids_and_names" placeholder="Space-separated list of steamids (the profile name on steamcommunity.com, not the login or display name) or steamid64s" rows="2">{{ passed_ids }}</textarea>
-    <button type="submit" class="btn btn-default">Compare These Users</button>
-  </form>
+<a href="{{ url_for('steam_friends.login') }}">Login</a>
 
-  <div class="table-responsive">
-    <table id="steamGames" class="table table-hover tablesorter">
-      <thead>
-        <tr>
-          <th>Game</th>
-          <th>Owners</th>
-          {% for u in steam_users | sort %}
-            <th>
-                <img alt="{{ u.steamid }}" class="img-thumbnail pull-left" src="{{ u.avatar }}" />
-                {{ u }}
-            </th>
-          {% endfor %}
-        </tr>
-      </thead>
-      <tbody>
-      {% for g, c in game_counter.most_common() %}
-        {% if c == steam_users | length %}
-          {% set tr_class="success" %}
-        {% elif c == 1 and steam_users | length > 2 %}
-          {% set tr_class="warning" %}
-        {% else %}
-          {% set tr_class="" %}
-        {% endif %}
-        <tr class="{{ tr_class }}">
-          <td><img class="img-thumbnail pull-left" src="{{ g.img_icon_url }}" />{{ g }}</td>
-          <td>{{ c }}</td>
-          {% for u in steam_users | sort %}
-            <td>
-              {% if g in u.games %}
-                <span class="glyphicon glyphicon-play"></span>
-              {% else %}
-                <span class="glyphicon glyphicon-download"></span>
-              {% endif %}
-            </td>
-          {% endfor %}
-        </tr>
+<form method="GET">
+  <textarea class="form-control" name="ids_and_names" placeholder="Space-separated list of steamids (the profile name on steamcommunity.com, not the login or display name) or steamid64s" rows="2">{{ passed_ids }}</textarea>
+  <button type="submit" class="btn btn-default">Compare These Users</button>
+</form>
+
+{# todo: put this in a macro #}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="table-responsive">
+  <table id="steamGames" class="table table-hover tablesorter">
+    <thead>
+      <tr>
+        <th>Game</th>
+        <th>Owners</th>
+        {% for u in steam_users | sort %}
+          <th>
+              <img alt="{{ u.steamid }}" class="img-thumbnail pull-left" src="{{ u.avatar }}" />
+              {{ u }}
+          </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+    {% for g, c in game_counter.most_common() %}
+      {% if c == steam_users | length %}
+        {% set tr_class="success" %}
+      {% elif c == 1 and steam_users | length > 2 %}
+        {% set tr_class="warning" %}
       {% else %}
-        <tr class="danger">
-          <td colspan="{{ 2 + steam_users | length }}">No games in common :(</td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  <div class="table-responsive">
-    <table id="steamFriends" class="table table-hover tablesorter">
-      <thead>
-        <tr>
-          <th>Friends</th>
-          <th>Owners</th>
-          {% for u in steam_users | sort %}
-            <th>
-                <img alt="{{ u.steamid }}" class="img-thumbnail pull-left" src="{{ u.avatar }}" />
-                {{ u }}
-            </th>
-          {% endfor %}
-        </tr>
-      </thead>
-      <tbody>
-      {% for f, c in friend_counter.most_common() %}
-        {% if c == steam_users | length %}
-          {% set tr_class="success" %}
-        {% elif c == 1 and steam_users | length > 2 %}
-          {% set tr_class="warning" %}
-        {% else %}
-          {% set tr_class="" %}
-        {% endif %}
-        <tr class="{{ tr_class }}">
+        {% set tr_class="" %}
+      {% endif %}
+      <tr class="{{ tr_class }}">
+        <td><img class="img-thumbnail pull-left" src="{{ g.img_icon_url }}" />{{ g }}</td>
+        <td>{{ c }}</td>
+        {% for u in steam_users | sort %}
           <td>
-            <img alt="{{ f.steamid }}" class="img-thumbnail pull-left" src="{{ f.avatar }}" />
-            {{ f }}
+            {% if g in u.games %}
+              <span class="glyphicon glyphicon-play"></span>
+            {% else %}
+              <span class="glyphicon glyphicon-download"></span>
+            {% endif %}
           </td>
-          <td>{{ c }}</td>
-          {% for u in steam_users | sort %}
-            <td>
-              {% if f in u.friends %}
-                <span class="glyphicon glyphicon-user"></span>
-              {% else %}
-                <span class="glyphicon glyphicon-remove"></span>
-              {% endif %}
-            </td>
-          {% endfor %}
-        </tr>
-      {% else %}
-        <tr class="danger">
-          <td colspan="{{ 2 + steam_users | length }}">No games in common :(</td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  </div>
+        {% endfor %}
+      </tr>
+    {% else %}
+      <tr class="danger">
+        <td colspan="{{ 2 + steam_users | length }}">No games in common :(</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<div class="table-responsive">
+  <table id="steamFriends" class="table table-hover tablesorter">
+    <thead>
+      <tr>
+        <th>Friends</th>
+        <th>#</th>
+        {% for u in steam_users | sort %}
+          <th>
+              <img alt="{{ u.steamid }}" class="img-thumbnail pull-left" src="{{ u.avatar }}" />
+              {{ u }}
+          </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+    {% for f, c in friend_counter.most_common() %}
+      {% if c == steam_users | length %}
+        {% set tr_class="success" %}
+      {% elif c == 1 and steam_users | length > 2 %}
+        {% set tr_class="warning" %}
+      {% else %}
+        {% set tr_class="" %}
+      {% endif %}
+      <tr class="{{ tr_class }}">
+        <td>
+          <img alt="{{ f.steamid }}" class="img-thumbnail pull-left" src="{{ f.avatar }}" />
+          {{ f }}
+        </td>
+        <td>{{ c }}</td>
+        {% for u in steam_users | sort %}
+          <td>
+            {% if f in u.friends %}
+              <span class="glyphicon glyphicon-user"></span>
+            {% else %}
+              <span class="glyphicon glyphicon-remove"></span>
+            {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+    {% else %}
+      <tr class="danger">
+        <td colspan="{{ 2 + steam_users | length }}">No games in common :(</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block javascript %}
 <script src="https://raw.githubusercontent.com/christianbach/tablesorter/master/jquery.tablesorter.min.js"></script>
 <script>
   $(document).ready(function() {
@@ -135,6 +123,4 @@
     $("#steamFriends").tablesorter();
   });
 </script>
-
-</body>
-</html>
+{% endblock %}
