@@ -51,6 +51,12 @@ class SteamUser(object):
         self._friends = None
         self._games = None
 
+    def __eq__(self, other):
+        return self.steamid == other.steamid
+
+    def __hash__(self):
+        return hash(self.steamid)
+
     def __str__(self):
         return self.personaname
 
