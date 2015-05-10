@@ -47,9 +47,9 @@ def index():
     if use_default_steamid64s:
         steamid64s = [
             '76561198060689354',  # ARizzo
-            '76561197980747796',  # nynjawitay
+            # '76561197980747796',  # nynjawitay
             '76561197969428769',  # Son of Themis
-            '76561197979664690',  # JC
+            # '76561197979664690',  # JC
         ]
     flask.current_app.logger.info("checking users: %r", steamid64s)
 
