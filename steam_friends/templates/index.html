@@ -28,8 +28,7 @@
   {% endwith %}
 
   <form method="GET">
-    <textarea class="form-control" name="name" placeholder="Space-separated list of steamids (the name, but not the display name)" rows="2">{{ passed_names }}</textarea>
-    <textarea class="form-control" name="id" placeholder="Space-separated list of steamid64s" rows="2">{{ passed_ids }}</textarea>
+    <textarea class="form-control" name="ids_and_names" placeholder="Space-separated list of steamids (the profile name on steamcommunity.com, not the login or display name) or steamid64s" rows="2">{{ passed_ids }}</textarea>
     <button type="submit" class="btn btn-default">Compare These Users</button>
   </form>
 
@@ -78,15 +77,50 @@
     </table>
   </div>
 
-  {% if failed_users %}
-    <h2>Failed Querying</h2>
-
-    <ul>
-    {% for u in failed_users %}
-      <li>{{ u }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
+  <div class="table-responsive">
+    <table id="steamFriends" class="table table-hover tablesorter">
+      <thead>
+        <tr>
+          <th>Game</th>
+          <th>Owners</th>
+          {% for u in steam_users.values() | sort %}
+            <th>
+                <img alt="{{ u.steamid }}" class="img-thumbnail pull-left" src="{{ u.avatar }}" />
+                {{ u }}
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+      {% for f, c in friend_counter.most_common() %}
+        {% if c == steam_users | length %}
+          {% set tr_class="success" %}
+        {% elif c == 1 and steam_users | length > 2 %}
+          {% set tr_class="warning" %}
+        {% else %}
+          {% set tr_class="" %}
+        {% endif %}
+        <tr class="{{ tr_class }}">
+          <td>{{ f }}</td>
+          <td>{{ c }}</td>
+          {% for u in steam_users.values() | sort %}
+            <td>
+              {% if f in u.friends %}
+                <span class="glyphicon glyphicon-user"></span>
+              {% else %}
+                <span class="glyphicon glyphicon-remove"></span>
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+      {% else %}
+        <tr class="danger">
+          <td colspan="{{ 2 + steam_users | length }}">No games in common :(</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

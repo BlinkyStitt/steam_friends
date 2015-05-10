@@ -45,8 +45,9 @@ class SteamUser(object):
         self.personaname = kwargs['personaname']
         self.personastate = kwargs['personastate']
 
-        self.games = []
-        self.friends = []
+        # these are lazy loaded
+        self._friends = None
+        self._games = None
 
     def __str__(self):
         return self.personaname
@@ -58,6 +59,45 @@ class SteamUser(object):
             personaname=self.personaname,
             num_games=len(self.games),
         )
+
+    @property
+    def friends(self, relationship='friend'):
+        if self._friends is None:
+            friends_response = steam.api.interface('ISteamUser').GetFriendList(
+                steamid=self.steamid,
+                relationship=relationship,
+            )
+            f = []
+            for friends_data in friends_response['friendslist']['friends']:
+                f.append(friends_data['steamid'])
+            self._friends = f
+        return self._friends
+
+    @property
+    def games(self, include_appinfo=1, include_played_free_games=1):
+        if self._games is None:
+            games_response = steam.api.interface('IPlayerService').GetOwnedGames(
+                steamid=self.steamid,
+                include_appinfo=include_appinfo,
+                include_played_free_games=include_played_free_games,
+            )
+            g = []
+            for game_data in games_response['response']['games']:
+                g.append(SteamApp(**game_data))
+            self._games = g
+        return self._games
+
+    @classmethod
+    def get_users(cls, steamid64s):
+        steam_users = {}
+        users_response = steam.api.interface('ISteamUser').GetPlayerSummaries(
+            steamids=steamid64s,
+            version=2,
+        )
+        for user_data in users_response['response']['players']:
+            u = cls(**user_data)
+            steam_users[u.steamid] = u
+        return steam_users
 
     @classmethod
     def id_to_id64(cls, steamid):
