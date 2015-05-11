@@ -23,7 +23,13 @@ def create_app():
         raise ValueError("You must export STEAM_FRIENDS_SECRET_KEY")
 
     if os.environ.get("STEAM_FRIENDS_DEBUG") == "1":
+        from flask_debugtoolbar import DebugToolbarExtension
+
         app.debug = True
+        app.config['DEBUG_TB_PROFILER_ENABLED'] = True
+        # app.config['DEBUG_TB_TEMPLATE_EDITOR_ENABLED'] = True
+
+        DebugToolbarExtension(app)
 
     if os.environ.get("STEAM_FRIENDS_PROXY_FIX") == "1":
         app.wsgi_app = fixers.ProxyFix(app.wsgi_app)
