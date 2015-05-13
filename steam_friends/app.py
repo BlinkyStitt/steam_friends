@@ -7,7 +7,8 @@ import sys
 from werkzeug.contrib import fixers
 import steam  # https://github.com/Lagg/steamodd
 
-from steam_friends import config, ext, views
+from steam_friends import config, ext
+from steam_friends.views import api, auth, main
 
 
 def create_app(app_env=None):
@@ -39,7 +40,11 @@ def create_app(app_env=None):
     ext.oid.init_app(app)
 
     # attach our blueprints
-    app.register_blueprint(views.blueprint)
+    map(app.register_blueprint, [
+        api.blueprint,
+        auth.blueprint,
+        main.blueprint,
+    ])
 
     # dev only things go here
     if app.debug:

@@ -8,6 +8,7 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
     DEBUG_TB_PROFILER_ENABLED = True
     SECRET_KEY = "not very secret"
 
