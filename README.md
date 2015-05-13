@@ -26,7 +26,7 @@ Building static files::
 
 Running the app::
 
-    STEAMODD_API_KEY=X STEAM_FRIENDS_SECRET_KEY=Y STEAM_FRIENDS_DEBUG=1 ./serve.py
+    STEAM_FRIENDS_ENV=dev ./serve.py
 
     open http://127.0.0.1:10000/
 
@@ -39,7 +39,7 @@ Running the python tests::
     virtualenv env
     . env/bin/activate
     pip install -r requirements-tests.txt
-    STEAMODD_API_KEY=X STEAM_FRIENDS_SECRET_KEY=Y py.test
+    py.test
 
 
 Production
@@ -51,4 +51,4 @@ Then run the app::
 
     virtualenv env
     env/bin/pip install -r requirements.txt
-    STEAMODD_API_KEY=X STEAM_FRIENDS_SECRET_KEY=Y STEAM_FRIENDS_PROXY_FIX=1 ./env/bin/python ./serve.py
+    STEAM_FRIENDS_ENV=prod ./env/bin/python ./serve.py
