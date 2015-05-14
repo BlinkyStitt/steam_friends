@@ -1,9 +1,12 @@
+import functools
+
 import flask
 import steam.api
 
 from steam_friends import ext
 
 
+@functools.total_ordering
 class SteamApp(object):
 
     image_url = "http://media.steampowered.com/steamcommunity/public/images/apps/{appid}/{hash}.jpg"
@@ -11,14 +14,10 @@ class SteamApp(object):
     def __init__(self, **kwargs):
         self.appid = kwargs['appid']
         self.name = kwargs['name'].encode('ascii', 'ignore')  # todo: what should we do here?
-        self.img_logo_url = self.image_url.format(
-            appid=self.appid,
-            hash=kwargs['img_logo_url'],
-        )
-        self.img_icon_url = self.image_url.format(
-            appid=self.appid,
-            hash=kwargs['img_icon_url'],
-        )
+
+        self._img_logo_url = kwargs['img_logo_url']
+        self._img_icon_url = kwargs['img_icon_url']
+
         # there are more attributes than this, but we don't need them
 
     def __eq__(self, other):
@@ -26,6 +25,9 @@ class SteamApp(object):
             return self.appid == other.appid
         except AttributeError:
             return False
+
+    def __lt__(self, other):
+        return self.name < other.name
 
     def __hash__(self):
         return hash(self.appid)
@@ -40,7 +42,24 @@ class SteamApp(object):
     def __str__(self):
         return self.name
 
+    @property
+    def img_icon_url(self):
+        return self.image_url.format(
+            appid=self.appid,
+            hash=self._img_icon_url,
+        )
 
+    @property
+    def img_logo_url(self):
+        return self.image_url.format(
+            appid=self.appid,
+            hash=self._img_logo_url,
+        )
+
+    # todo: crawl steam's store page and expose a bunch of things
+
+
+@functools.total_ordering
 class SteamUser(object):
 
     def __init__(self, **kwargs):
@@ -58,6 +77,12 @@ class SteamUser(object):
     def __eq__(self, other):
         try:
             return self.steamid == other.steamid
+        except AttributeError:
+            return False
+
+    def __lt__(self, other):
+        try:
+            return self.personaname < other.personaname
         except AttributeError:
             return False
 
@@ -96,8 +121,6 @@ class SteamUser(object):
     @ext.cache.memoize(3600)
     def games(self, include_appinfo=1, include_played_free_games=1):
         g = []
-
-        # todo: only lookup games that aren't in our cache
 
         flask.current_app.logger.info("Checking games of %s", self)
         games_response = steam.api.interface('IPlayerService').GetOwnedGames(

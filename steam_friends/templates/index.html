@@ -32,7 +32,7 @@
       <tr>
         <th>Game</th>
         <th>Owners</th>
-        {% for u in steam_users | sort %}
+        {% for u in steam_users %}
           <th>
               <img alt="{{ u.steamid }}" class="img-thumbnail pull-left" src="{{ u.avatar }}" />
               {{ u }}
@@ -52,7 +52,7 @@
       <tr class="{{ tr_class }}">
         <td><img class="img-thumbnail pull-left" src="{{ g.img_icon_url }}" />{{ g }}</td>
         <td>{{ c }}</td>
-        {% for u in steam_users | sort %}
+        {% for u in steam_users %}
           <td>
             {% if g in u.games %}
               <span class="glyphicon glyphicon-play"></span>
@@ -77,7 +77,7 @@
       <tr>
         <th>Friends</th>
         <th>#</th>
-        {% for u in steam_users | sort %}
+        {% for u in steam_users %}
           <th>
               <img alt="{{ u.steamid }}" class="img-thumbnail pull-left" src="{{ u.avatar }}" />
               {{ u }}
@@ -100,7 +100,7 @@
           {{ f }}
         </td>
         <td>{{ c }}</td>
-        {% for u in steam_users | sort %}
+        {% for u in steam_users %}
           <td>
             {% if f in u.friends %}
               <span class="glyphicon glyphicon-user"></span>

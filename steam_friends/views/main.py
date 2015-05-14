@@ -86,6 +86,8 @@ def index():
                 flask.flash("Error while querying for friends of {}".format(u), "danger")
                 continue
 
+    steam_users.sort()
+
     return flask.render_template(
         'index.html',
         game_counter=game_counter,
