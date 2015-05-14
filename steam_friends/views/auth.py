@@ -41,7 +41,7 @@ def logout():
     return flask.redirect(ext.oid.get_next_url())
 
 
-@blueprint.before_request
+@blueprint.before_app_request
 def lookup_current_user():
     flask.g.steam_user = None
     if 'openid' in flask.session:
