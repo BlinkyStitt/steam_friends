@@ -5,7 +5,12 @@
 {% block body %}
 <h1>Steam Friends!</h1>
 
-<a href="{{ url_for('auth.login') }}">Login</a>
+
+{% if g.steam_user == None %}
+  <a href="{{ url_for('auth.login') }}">Login</a>
+{% else %}
+  <a href="{{ url_for('auth.logout') }}">{{ g.steam_user }} | Logout</a>
+{% endif %}
 
 <form method="GET">
   <textarea class="form-control" name="ids_and_names" placeholder="Space-separated list of steamids (the profile name on steamcommunity.com, not the login or display name) or steamid64s" rows="2">{{ passed_ids }}</textarea>

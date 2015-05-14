@@ -22,7 +22,10 @@ class SteamApp(object):
         # there are more attributes than this, but we don't need them
 
     def __eq__(self, other):
-        return self.appid == other.appid
+        try:
+            return self.appid == other.appid
+        except AttributeError:
+            return False
 
     def __hash__(self):
         return hash(self.appid)
@@ -53,7 +56,10 @@ class SteamUser(object):
         self._games = None
 
     def __eq__(self, other):
-        return self.steamid == other.steamid
+        try:
+            return self.steamid == other.steamid
+        except AttributeError:
+            return False
 
     def __hash__(self):
         return hash(self.steamid)
