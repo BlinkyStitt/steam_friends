@@ -22,11 +22,7 @@ def login():
     if flask.g.steam_user is not None:
         return flask.redirect(ext.oid.get_next_url())
     if flask.request.method == 'POST':
-        return ext.oid.try_login(
-            'http://steamcommunity.com/openid',
-            ask_for=['email', 'nickname'],
-            ask_for_optional=['fullname'],
-        )
+        return ext.oid.try_login('http://steamcommunity.com/openid')
     return flask.render_template(
         'login.html',
         next=ext.oid.get_next_url(),
