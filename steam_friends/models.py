@@ -69,12 +69,12 @@ class SteamUser(object):
         )
 
     @property
-    @ext.cache.memoize(600)
+    @ext.cache.memoize(3600)
     def friends(self, relationship='friend'):
         f = []
 
         # todo: only lookup friends that aren't in our cache
-
+        flask.current_app.logger.info("Checking friends of %s", self)
         friends_response = steam.api.interface('ISteamUser').GetFriendList(
             steamid=self.steamid,
             relationship=relationship,
@@ -87,12 +87,13 @@ class SteamUser(object):
         return self.get_users(f)
 
     @property
-    @ext.cache.memoize(600)
+    @ext.cache.memoize(3600)
     def games(self, include_appinfo=1, include_played_free_games=1):
         g = []
 
         # todo: only lookup games that aren't in our cache
 
+        flask.current_app.logger.info("Checking games of %s", self)
         games_response = steam.api.interface('IPlayerService').GetOwnedGames(
             steamid=self.steamid,
             include_appinfo=include_appinfo,
@@ -106,37 +107,51 @@ class SteamUser(object):
         return g
 
     @classmethod
-    @ext.cache.memoize(600)
     def get_user(cls, steamid64):
         return cls.get_users(steamid64)[0]
 
     @classmethod
-    @ext.cache.memoize(600)
     def get_users(cls, steamid64s):
-        steam_users = []  # todo: maybe make this a dict
+        users = []
 
-        # todo: only lookup users that aren't in our cache
+        # fetch any users in the cache
+        cached_users = ext.cache.cache.get_dict(*steamid64s)
+        for cached_id, cached_data in cached_users.iteritems():
+            if not cached_data:
+                # this shouldn't ever happen
+                continue
 
+            u = cls(**cached_data)
+            steamid64s.remove(cached_id)
+            users.append(u)
+
+        # fetch any users not in the cache
         users_response = steam.api.interface('ISteamUser').GetPlayerSummaries(
             steamids=steamid64s,
             version=2,
         )
         for user_data in users_response['response']['players']:
+            if not user_data:
+                # this shouldn't ever happen
+                continue
             u = cls(**user_data)
-            steam_users.append(u)
-        return steam_users
+            ext.cache.cache.set(u.steamid, user_data)
+            users.append(u)
+
+        return users
 
     @classmethod
-    @ext.cache.memoize(600)
+    @ext.cache.memoize(3600)
     def id_from_openid(cls, claim_id):
         if not claim_id.startswith('http://steamcommunity.com/openid/id/'):
             raise ValueError("claim_id not from steamcommunity.com")
         return claim_id[len('http://steamcommunity.com/openid/id/'):]
 
     @classmethod
-    @ext.cache.memoize(600)
+    @ext.cache.memoize(3600)
     def id_to_id64(cls, steamid):
         # todo: cache this
+        flask.current_app.logger.info("Checking for steam64id of %s", steamid)
         r = steam.api.interface('ISteamUser').ResolveVanityURL(vanityurl=steamid)
         try:
             return r['response']['steamid']

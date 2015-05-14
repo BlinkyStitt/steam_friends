@@ -1,7 +1,10 @@
-from steam_friends import views
+from steam_friends.views import api, auth, main
 
 
 def test_app(flask_app):
     assert flask_app.debug is True
+    assert flask_app.secret_key
     assert flask_app.testing is True
-    assert views.blueprint == flask_app.blueprints['steam_friends']
+    assert api.blueprint == flask_app.blueprints['api']
+    assert auth.blueprint == flask_app.blueprints['auth']
+    assert main.blueprint == flask_app.blueprints['steam_friends']
