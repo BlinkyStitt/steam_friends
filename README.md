@@ -18,6 +18,7 @@ Before Developing::
 
     export PATH=$(pwd)/static/node_modules/.bin:$PATH
     . env/bin/activate
+    pip install -r requirements-dev.txt
 
 Building static files::
 
