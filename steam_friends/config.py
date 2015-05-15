@@ -17,6 +17,7 @@ class DevelopmentConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False
+    OPENID_FS_STORE_PATH = "/tmp/steam_friends/openid"
     PROXY_FIX = True
     SECRET_KEY = '\xbfCN\xf6\xbfy\xde\xcb~\x19\x1b\xc5\x9dN\x0f"n\x8b\x13$S\xa5\xe7\xd3'
     TESTING = True
