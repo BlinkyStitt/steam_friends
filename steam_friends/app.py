@@ -49,10 +49,6 @@ def create_app(app_env=None):
     # dev only things go here
     if app.debug:
         from flask_debugtoolbar import DebugToolbarExtension
-
-        app.config['DEBUG_TB_PROFILER_ENABLED'] = True
-        # app.config['DEBUG_TB_TEMPLATE_EDITOR_ENABLED'] = True
-
         DebugToolbarExtension(app)
 
     # fix the IP when behind an nginx proxy
