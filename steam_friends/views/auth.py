@@ -1,5 +1,7 @@
 import flask
 
+from flask.ext import openid
+
 from steam_friends import ext, models
 
 
