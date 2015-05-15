@@ -51,5 +51,6 @@ Setup nginx to proxy your domain to port 10000
 Then run the app::
 
     virtualenv env
-    env/bin/pip install -r requirements.txt
-    STEAM_FRIENDS_ENV=prod ./env/bin/python ./serve.py
+    env/bin/pip install -r requirements-prod.txt
+    STEAM_FRIENDS_ENV=prod ./env/bin/uwsgi --socket 0.0.0.0:10000 --protocol=http -H ./env/ -w serve:app
+
