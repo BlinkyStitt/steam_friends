@@ -5,6 +5,10 @@
 {% block body %}
 <h1>Steam Friends!</h1>
 
+<div class="alert alert-warning" role="alert">
+  Sorry, but logging in is currently broken. It works in development mode on my laptop, but not when running here. I'll figure it out eventually.
+</div>
+
 {% if g.steam_user == None %}
   <form action="{{ url_for('auth.login') }}" method="post">
     <input class="btn btn-default" type="submit" value="Login with Steam">

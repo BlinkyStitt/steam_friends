@@ -27,7 +27,7 @@ Building static files::
 
 Running the app::
 
-    STEAM_FRIENDS_ENV=dev ./serve.py
+    ./dev.py
 
     open http://127.0.0.1:10000/
 
@@ -52,5 +52,5 @@ Then run the app::
 
     virtualenv env
     env/bin/pip install -r requirements-prod.txt
-    STEAM_FRIENDS_ENV=prod ./env/bin/uwsgi --socket 0.0.0.0:10000 --protocol=http -H ./env/ -w serve:app
+    uwsgi --buffer-size 8192 --master --processes 4 --threads 2 --socket 0.0.0.0:10000 --stats 127.0.0.1:10001 --wsgi-file prod.py
 
