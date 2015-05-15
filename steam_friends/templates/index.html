@@ -5,11 +5,14 @@
 {% block body %}
 <h1>Steam Friends!</h1>
 
-
 {% if g.steam_user == None %}
-  <a href="{{ url_for('auth.login') }}">Login</a>
+  <form action="{{ url_for('auth.login') }}" method="post">
+    <input class="btn btn-default" type="submit" value="Login with Steam">
+    <input type="hidden" name="action" value="login">
+    <input type="hidden" name="next" value="{{ next }}">
+  </form>
 {% else %}
-  <a href="{{ url_for('auth.logout') }}">{{ g.steam_user }} | Logout</a>
+  <a class="btn btn-default" href="{{ url_for('auth.logout') }}">Logout {{ g.steam_user }}</a>
 {% endif %}
 
 <form method="GET">

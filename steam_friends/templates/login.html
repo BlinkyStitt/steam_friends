@@ -3,22 +3,22 @@
 {% block title %}Steam Friends - Sign in{% endblock %}
 
 {% block body %}
-  <h2>Sign in</h2>
-  <form action="" method=post>
+<h2>Sign in</h2>
 
-    {# todo: put this in a macro #}
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+{# todo: put this in a macro #}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 
-    <p>
-      <input type=submit value="Sign in">
-      <input type=hidden name=next value="{{ next }}">
-  </form>
+<form action="" method=post>
+  <input type=submit value="Sign in">
+  <input type=hidden name=next value="{{ next }}">
+</form>
 
-  <!-- http://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_small.png -->
+<!-- http://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_small.png -->
+
 {% endblock %}
