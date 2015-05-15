@@ -1,5 +1,4 @@
 import flask
-from flask.ext import openid
 
 from steam_friends import ext, models
 
@@ -23,7 +22,7 @@ def login():
     if flask.g.steam_user is not None:
         return flask.redirect(ext.oid.get_next_url())
     if flask.request.method == 'POST':
-        url = openid.COMMON_PROVIDERS['steam']
+        url = 'http://steamcommunity.com/openid'  # openid.COMMON_PROVIDERS['steam']
         return ext.oid.try_login(url)
     return flask.render_template(
         'login.html',
@@ -43,8 +42,7 @@ def logout():
 def lookup_current_user():
     flask.g.steam_user = None
     if 'openid' in flask.session:
-        openid = flask.session['openid']
-        steamid = models.SteamUser.id_from_openid(openid)
+        steamid = models.SteamUser.id_from_openid(flask.session['openid'])
         flask.g.steamid = steamid
         flask.g.steam_user = models.SteamUser.get_user(steamid)
 
