@@ -1,9 +1,10 @@
 class Config(object):
     DEBUG = False
-    TESTING = False
 
     # todo: remove this and revoke the key. but I'm lazy now
     STEAMODD_API_KEY = "DA0509DA52BC706F282F2D315D3C61BB"
+
+    TESTING = False
 
 
 class DevelopmentConfig(Config):
@@ -11,17 +12,19 @@ class DevelopmentConfig(Config):
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     DEBUG_TB_PROFILER_ENABLED = True
     SECRET_KEY = "not very secret"
+    TESTING = False
 
 
 class ProductionConfig(Config):
-    DEBUG = True
+    DEBUG = False
     PROXY_FIX = True
     SECRET_KEY = '\xbfCN\xf6\xbfy\xde\xcb~\x19\x1b\xc5\x9dN\x0f"n\x8b\x13$S\xa5\xe7\xd3'
+    TESTING = True
 
 
 class TestingConfig(Config):
-    TESTING = True
     SECRET_KEY = "not very secret"
+    TESTING = True
 
 
 configs = {
