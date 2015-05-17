@@ -9,6 +9,11 @@ from steam_friends import models
 blueprint = flask.Blueprint('steam_friends', __name__)
 
 
+@blueprint.route('/test/error')
+def error():
+    return 1 / 0
+
+
 @blueprint.route('/')
 def index():
     game_counter = collections.Counter()

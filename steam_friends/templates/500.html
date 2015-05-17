@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}Steam Friends - Error{% endblock %}
+
+{% block body %}
+<h2>Error!</h2>
+
+{# todo: put this in a macro #}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="alert alert-danger" role="alert">{{ error_message }}</div>
+
+{% endblock %}

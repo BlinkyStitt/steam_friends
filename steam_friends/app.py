@@ -4,11 +4,18 @@ import flask
 import os
 import sys
 
-from werkzeug.contrib import fixers
+from flask_debugtoolbar import DebugToolbarExtension
 import steam  # https://github.com/Lagg/steamodd
 
 from steam_friends import config, ext
 from steam_friends.views import api, auth, main
+
+
+def internal_error(e):
+    error_message = "Caught unhandled exception: {}".format(e)
+    # flask does this logging in handle_user_exception
+    # flask.current_app.logger.exception(error_message)
+    return flask.render_template('500.html', error_message=error_message), 500
 
 
 def create_app(app_env=None):
@@ -18,9 +25,9 @@ def create_app(app_env=None):
     try:
         app_env = app_env or os.environ['STEAM_FRIENDS_ENV']
     except KeyError:
-        print("ERROR: You must `export STEAM_FRIENDS_ENV=dev`", file=sys.stderr)
+        # print because logging can't be setup yet
+        print("ERROR: You must `export STEAM_FRIENDS_ENV=dev` or similar", file=sys.stderr)
         sys.exit(1)
-
     app_config = config.configs[app_env]
     app.config.from_object(app_config)
 
@@ -46,13 +53,12 @@ def create_app(app_env=None):
         main.blueprint,
     ])
 
+    # setup application wide error handlers
+    # other error handlers should be attached to their respective blueprints
+    app.error_handler_spec[None][500] = internal_error
+
     # dev only things go here
     if app.debug:
-        from flask_debugtoolbar import DebugToolbarExtension
         DebugToolbarExtension(app)
-
-    # fix the IP when behind an nginx proxy
-    if app.config.get('PROXY_FIX'):
-        app.wsgi_app = fixers.ProxyFix(app.wsgi_app)
 
     return app

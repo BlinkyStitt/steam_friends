@@ -1,4 +1,8 @@
-# import logging
+import logging
+import sys
+
+
+log = logging.getLogger(__name__)
 
 
 class Config(object):
@@ -11,8 +15,18 @@ class Config(object):
     TESTING = False
 
     @classmethod
-    def LOGGING_CONFIG_FUNC(cls):  # noqa  # todo: make this pretty
-        raise NotImplementedError("%s has no LOGGING_CONFIG_FUNC" % cls)
+    def _configure_logging(cls):
+        """Setup loggers to send most everything to stderr.
+
+        .. TODO:: using classmethods and _functions as part of config doesn't seem like the best way to setup logging
+        """
+        logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+
+        # lower loglevel on 3rd party modules
+        logging.getLogger('werkzeug').setLevel(logging.INFO)
+
+        log.debug("Basic logging configured")
+    LOGGING_CONFIG_FUNC = _configure_logging
 
 
 class DevelopmentConfig(Config):
@@ -22,18 +36,18 @@ class DevelopmentConfig(Config):
     SECRET_KEY = "not very secret"
     TESTING = False
 
-    """
-    @classmethod
-    def LOGGING_CONFIG_FUNC(cls):  # noqa: todo: make this pretty
-        logging.basicConfig()
-    """
-
 
 class ProductionConfig(Config):
     DEBUG = False
     SECRET_KEY = '\xbfCN\xf6\xbfy\xde\xcb~\x19\x1b\xc5\x9dN\x0f"n\x8b\x13$S\xa5\xe7\xd3'
     SERVER_NAME = 'steam.stitthappens.com'
     TESTING = False
+
+    # using classmethods and _functions doesn't seem like the best way to setup logging
+    @classmethod
+    def _configure_logging(cls):
+        pass  # todo: write this!
+    LOGGING_CONFIG_FUNC = _configure_logging
 
 
 class TestingConfig(Config):

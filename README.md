@@ -20,14 +20,16 @@ Before Developing::
     . env/bin/activate
     pip install -r requirements-dev.txt
 
-Building static files::
+Build the static files::
 
     cd static
     grunt
 
-Running the app::
+Run the development server::
 
     ./dev.py
+
+View the development server::
 
     open http://127.0.0.1:10000/
 
@@ -35,22 +37,26 @@ Running the app::
 Testing
 ----------
 
-Running the python tests::
+Setup the python tests::
 
     virtualenv env
     . env/bin/activate
     pip install -r requirements-tests.txt
-    py.test
+
+Run the python tests::
+    ./test.sh
 
 
 Production
 ----------
 
-Setup nginx to proxy your domain to port 10000
+Setup nginx to uwsgi_pass to port 10000
 
-Then run the app::
+Setup the production app::
 
     virtualenv env
     env/bin/pip install -r requirements-prod.txt
-    uwsgi --buffer-size 8192 --master --processes 4 --threads 2 --socket 0.0.0.0:10000 --stats 127.0.0.1:10001 --wsgi-file prod.py
 
+Run the production app::
+
+    uwsgi prod.ini
