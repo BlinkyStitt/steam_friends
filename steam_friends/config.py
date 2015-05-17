@@ -1,3 +1,6 @@
+# import logging
+
+
 class Config(object):
     DEBUG = False
     OPENID_FS_STORE_PATH = "/tmp/steam_friends/openid"
@@ -7,6 +10,10 @@ class Config(object):
 
     TESTING = False
 
+    @classmethod
+    def LOGGING_CONFIG_FUNC(cls):  # noqa  # todo: make this pretty
+        raise NotImplementedError("%s has no LOGGING_CONFIG_FUNC" % cls)
+
 
 class DevelopmentConfig(Config):
     DEBUG = True
@@ -14,6 +21,12 @@ class DevelopmentConfig(Config):
     DEBUG_TB_PROFILER_ENABLED = True
     SECRET_KEY = "not very secret"
     TESTING = False
+
+    """
+    @classmethod
+    def LOGGING_CONFIG_FUNC(cls):  # noqa: todo: make this pretty
+        logging.basicConfig()
+    """
 
 
 class ProductionConfig(Config):

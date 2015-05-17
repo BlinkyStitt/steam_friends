@@ -1,4 +1,4 @@
-import steam_friends.app
+from steam_friends import app
 
-application = steam_friends.app.create_app(app_env='prod')
-print "Loaded", application
+application = app.create_app(app_env='prod')
+application.config['LOGGING_CONFIG_FUNC']()
