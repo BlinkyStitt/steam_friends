@@ -72,7 +72,7 @@ def index():
     else:
         if len(steam_users) == 0:
             flask.flash("No users found!", "danger")
-        elif len(steam_users) < 2:
+        elif len(steam_users) <= 2:
             flask.flash("This app works a lot better with more than 2 users.", "info")
 
         for u in steam_users:

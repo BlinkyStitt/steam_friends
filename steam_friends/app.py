@@ -24,11 +24,11 @@ def create_app(app_env=None):
     # load main configs
     try:
         app_env = app_env or os.environ['STEAM_FRIENDS_ENV']
+        app_config = config.configs[app_env]
     except KeyError:
         # print because logging can't be setup yet
-        print("ERROR: You must `export STEAM_FRIENDS_ENV=dev` or similar", file=sys.stderr)
+        print("ERROR: You must `export STEAM_FRIENDS_ENV` to one of: {}".format(', '.join(config.configs.iterkeys())), file=sys.stderr)
         sys.exit(1)
-    app_config = config.configs[app_env]
     app.config.from_object(app_config)
 
     # allow loading additional configuration
@@ -39,6 +39,13 @@ def create_app(app_env=None):
     for key, value in os.environ.iteritems():
         if key.startswith('STEAM_FRIENDS_'):
             config_key = key[len('STEAM_FRIENDS_'):]
+
+            # I don't love this...
+            if value == 'True':
+                value = True
+            elif value == 'False':
+                value = False
+
             app.config[config_key] = value
 
     # setup apis and extensions

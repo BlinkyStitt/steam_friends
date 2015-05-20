@@ -1,6 +1,33 @@
 import cassette
+import pytest
 
 from steam_friends import models
+
+
+def test_id_from_openid(flask_app):
+    fake_openid = 'http://steamcommunity.com/openid/id/test'
+    with flask_app.test_request_context():
+        assert models.SteamUser.id_from_openid(fake_openid) == 'test'
+
+
+def test_bad_id_from_openid(flask_app):
+    fake_openid = 'http://notsteamcommunity.com/openid/id/test'
+    with flask_app.test_request_context():
+        with pytest.raises(ValueError):
+            models.SteamUser.id_from_openid(fake_openid)
+
+
+def test_id_to_id64(flask_app):
+    with cassette.play('data/test_steam_user_from_steamid64.yaml'):
+        with flask_app.test_request_context():
+            assert models.SteamUser.id_to_id64('nynjawitay') == '76561197980747796'
+
+
+def test_bad_id_to_id64(flask_app):
+    with cassette.play('data/test_steam_user_from_steamid64.yaml'):
+        with flask_app.test_request_context():
+            steamid64 = models.SteamUser.id_to_id64('nynjawitaynynjawitaynynjawitay')
+            assert steamid64 is None
 
 
 def test_steam_app():
