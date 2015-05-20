@@ -15,6 +15,8 @@ DEBUG_LOG_FORMAT = (
 
 
 class Config(object):
+    CACHE_DEFAULT_TIMEOUT = 60 * 20
+    CACHE_TYPE = 'simple'
     DEBUG = False
     LOGGER_HANDLER_POLICY = 'debug'
     LOGGER_NAME = 'flask'
@@ -54,10 +56,9 @@ class DevelopmentConfig(Config):
 
 
 class ProductionConfig(Config):
-    CACHE_TYPE = 'redis'
     CACHE_REDIS_PORT = '10002'
     CACHE_REDIS_HOST = '127.0.0.1'
-    CACHE_DEFAULT_TIMEOUT = 60 * 20
+    CACHE_TYPE = 'redis'
     DEBUG = False
     LOGGER_HANDLER_POLICY = 'production'
     SECRET_KEY = '\xbfCN\xf6\xbfy\xde\xcb~\x19\x1b\xc5\x9dN\x0f"n\x8b\x13$S\xa5\xe7\xd3'
