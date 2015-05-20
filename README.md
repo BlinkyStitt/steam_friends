@@ -64,3 +64,11 @@ Run the production app::
 Run the production app on FreeBSD::
 
     SSL_CERT_FILE=/usr/local/share/certs/ca-root-nss.crt uwsgi prod.ini
+
+
+Troubleshooting
+---------------
+
+If you are serving the app through nginx and the responses are being truncated,
+run `nginx -V` and make sure all of the paths listed exist and are owned by the
+propert user.
