@@ -72,3 +72,21 @@ Troubleshooting
 If you are serving the app through nginx and the responses are being truncated,
 run `nginx -V` and make sure all of the paths listed exist and are owned by the
 propert user.
+
+
+Todo
+----
+
+* Better handle cache being unavailable
+* Cost of the games
+* Links to buy the games that not everyone has
+* Show gift copies of games
+* Better definition of display name vs steamid vs steamid64.
+* Online/offline icons for all the players
+* Have a button to auth with steam so we can fetch their userid without them looking it up
+* Show friends lists for all the queried users with check boxes to add the friends without having to type any names or look up any 64-bit ids
+* Only include actually installed games. I’m not sure this is possible
+* Filesize of the games
+* Caching
+* Rate-limiting
+* Better CSS than Bootstrap
