@@ -137,7 +137,13 @@ class SteamUser(object):
 
     @classmethod
     def get_user(cls, steamid64):
-        return cls.get_users(steamid64)[0]
+        users = cls.get_users(steamid64)
+
+        if not users:
+            return None
+        if len(users) > 1:
+            raise Exception("More than one user found with steamid64 %s", steamid64)
+        return users[0]
 
     @classmethod
     def get_users(cls, steamid64s):

@@ -357,11 +357,11 @@
     ,\n\t\t\t\t\"img_logo_url\": \"a6582cbd44dfc66cc78e113ca26bd74f7812c621\"\n\t\t\
     \t}\n\t\t]\n\t\t\n\t}\n}"
   headers: {content-length: '24051', content-type: application/json; charset=UTF-8,
-    date: 'Wed, 20 May 2015 01:52:21 GMT', expires: 'Wed, 20 May 2015 01:52:21 GMT',
+    date: 'Wed, 20 May 2015 02:12:40 GMT', expires: 'Wed, 20 May 2015 02:12:40 GMT',
     x-eresult: '1'}
   length: 0
-  raw_headers: ["X-eresult: 1\r\n", "Date: Wed, 20 May 2015 01:52:21 GMT\r\n", "expires:\
-      \ Wed, 20 May 2015 01:52:21 GMT\r\n", "content-type: application/json; charset=UTF-8\r\
+  raw_headers: ["X-eresult: 1\r\n", "Date: Wed, 20 May 2015 02:12:40 GMT\r\n", "expires:\
+      \ Wed, 20 May 2015 02:12:40 GMT\r\n", "content-type: application/json; charset=UTF-8\r\
       \n", "content-length: 24051\r\n"]
   reason: OK
   status: 200
@@ -403,11 +403,11 @@
     img_logo_url\": \"d4f836839254be08d8e9dd333ecc9a01782c26d2\"\n\t\t\t}\n\t\t]\n\
     \t\t\n\t}\n}"
   headers: {content-length: '2240', content-type: application/json; charset=UTF-8,
-    date: 'Wed, 20 May 2015 01:52:21 GMT', expires: 'Wed, 20 May 2015 01:52:21 GMT',
+    date: 'Wed, 20 May 2015 02:12:41 GMT', expires: 'Wed, 20 May 2015 02:12:41 GMT',
     x-eresult: '1'}
   length: 0
-  raw_headers: ["X-eresult: 1\r\n", "Date: Wed, 20 May 2015 01:52:21 GMT\r\n", "expires:\
-      \ Wed, 20 May 2015 01:52:21 GMT\r\n", "content-type: application/json; charset=UTF-8\r\
+  raw_headers: ["X-eresult: 1\r\n", "Date: Wed, 20 May 2015 02:12:41 GMT\r\n", "expires:\
+      \ Wed, 20 May 2015 02:12:41 GMT\r\n", "content-type: application/json; charset=UTF-8\r\
       \n", "content-length: 2240\r\n"]
   reason: OK
   status: 200
@@ -438,10 +438,10 @@
     \t\"steamid\": \"76561198137884154\",\n\t\t\t\t\"relationship\": \"friend\",\n\
     \t\t\t\t\"friend_since\": 1403401696\n\t\t\t}\n\t\t]\n\t\t\n\t}\n}"
   headers: {content-length: '1404', content-type: application/json; charset=UTF-8,
-    date: 'Wed, 20 May 2015 01:52:22 GMT', expires: 'Wed, 20 May 2015 01:52:22 GMT'}
+    date: 'Wed, 20 May 2015 02:12:40 GMT', expires: 'Wed, 20 May 2015 02:12:40 GMT'}
   length: 0
-  raw_headers: ["Date: Wed, 20 May 2015 01:52:22 GMT\r\n", "expires: Wed, 20 May 2015\
-      \ 01:52:22 GMT\r\n", "content-type: application/json; charset=UTF-8\r\n", "content-length:\
+  raw_headers: ["Date: Wed, 20 May 2015 02:12:40 GMT\r\n", "expires: Wed, 20 May 2015\
+      \ 02:12:40 GMT\r\n", "content-type: application/json; charset=UTF-8\r\n", "content-length:\
       \ 1404\r\n"]
   reason: OK
   status: 200
@@ -473,10 +473,10 @@
     \ \"76561198096016427\",\n\t\t\t\t\"relationship\": \"friend\",\n\t\t\t\t\"friend_since\"\
     : 1372632124\n\t\t\t}\n\t\t]\n\t\t\n\t}\n}"
   headers: {content-length: '1449', content-type: application/json; charset=UTF-8,
-    date: 'Wed, 20 May 2015 01:52:21 GMT', expires: 'Wed, 20 May 2015 01:52:21 GMT'}
+    date: 'Wed, 20 May 2015 02:12:41 GMT', expires: 'Wed, 20 May 2015 02:12:41 GMT'}
   length: 0
-  raw_headers: ["Date: Wed, 20 May 2015 01:52:21 GMT\r\n", "expires: Wed, 20 May 2015\
-      \ 01:52:21 GMT\r\n", "content-type: application/json; charset=UTF-8\r\n", "content-length:\
+  raw_headers: ["Date: Wed, 20 May 2015 02:12:41 GMT\r\n", "expires: Wed, 20 May 2015\
+      \ 02:12:41 GMT\r\n", "content-type: application/json; charset=UTF-8\r\n", "content-length:\
       \ 1449\r\n"]
   reason: OK
   status: 200
@@ -484,42 +484,49 @@
 ? httplib:GET api.steampowered.com:80/ISteamUser/GetPlayerSummaries/v2?key=DA0509DA52BC706F282F2D315D3C61BB&steamids=%5B%2776561198060689354%27%2C+%2776561197969428769%27%5D&format=json
   920b7f94c9b9682fa32fab913befe239 None
 : content: "{\n\t\"response\": {\n\t\t\"players\": [\n\t\t\t{\n\t\t\t\t\"steamid\"\
-    : \"76561198060689354\",\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"\
-    profilestate\": 1,\n\t\t\t\t\"personaname\": \"ARizzo\",\n\t\t\t\t\"lastlogoff\"\
-    : 1432019763,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/id/ARizzo/\"\
-    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/2f/2f1d0e0838170da310548a8f01a94d0c256b8a08.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/2f/2f1d0e0838170da310548a8f01a94d0c256b8a08_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/2f/2f1d0e0838170da310548a8f01a94d0c256b8a08_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791432588642\"\
-    ,\n\t\t\t\t\"timecreated\": 1332383733,\n\t\t\t\t\"personastateflags\": 0,\n\t\
-    \t\t\t\"loccountrycode\": \"US\",\n\t\t\t\t\"locstatecode\": \"CA\",\n\t\t\t\t\
-    \"loccityid\": 511\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197969428769\"\
-    ,\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\
-    \t\t\"personaname\": \"Son of Themis\",\n\t\t\t\t\"lastlogoff\": 1431908398,\n\
-    \t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197969428769/\"\
+    : \"76561197969428769\",\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"\
+    profilestate\": 1,\n\t\t\t\t\"personaname\": \"Son of Themis\",\n\t\t\t\t\"lastlogoff\"\
+    : 1431908398,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197969428769/\"\
     ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/54/5444b291ecddceb7f3a8a9684eeccf8ef5c2a577.jpg\"\
     ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/54/5444b291ecddceb7f3a8a9684eeccf8ef5c2a577_medium.jpg\"\
     ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/54/5444b291ecddceb7f3a8a9684eeccf8ef5c2a577_full.jpg\"\
     ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"realname\": \"Andre\",\n\t\t\t\t\"\
     primaryclanid\": \"103582791434796278\",\n\t\t\t\t\"timecreated\": 1097296995,\n\
     \t\t\t\t\"personastateflags\": 0,\n\t\t\t\t\"loccountrycode\": \"US\",\n\t\t\t\
-    \t\"locstatecode\": \"CA\"\n\t\t\t}\n\t\t]\n\t\t\n\t}\n}"
+    \t\"locstatecode\": \"CA\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198060689354\"\
+    ,\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\
+    \t\t\"personaname\": \"ARizzo\",\n\t\t\t\t\"lastlogoff\": 1432019763,\n\t\t\t\t\
+    \"profileurl\": \"http://steamcommunity.com/id/ARizzo/\",\n\t\t\t\t\"avatar\"\
+    : \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/2f/2f1d0e0838170da310548a8f01a94d0c256b8a08.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/2f/2f1d0e0838170da310548a8f01a94d0c256b8a08_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/2f/2f1d0e0838170da310548a8f01a94d0c256b8a08_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791432588642\"\
+    ,\n\t\t\t\t\"timecreated\": 1332383733,\n\t\t\t\t\"personastateflags\": 0,\n\t\
+    \t\t\t\"loccountrycode\": \"US\",\n\t\t\t\t\"locstatecode\": \"CA\",\n\t\t\t\t\
+    \"loccityid\": 511\n\t\t\t}\n\t\t]\n\t\t\n\t}\n}"
   headers: {content-length: '1761', content-type: application/json; charset=UTF-8,
-    date: 'Wed, 20 May 2015 01:52:21 GMT', expires: 'Wed, 20 May 2015 01:52:21 GMT'}
+    date: 'Wed, 20 May 2015 02:12:40 GMT', expires: 'Wed, 20 May 2015 02:12:40 GMT'}
   length: 0
-  raw_headers: ["Date: Wed, 20 May 2015 01:52:21 GMT\r\n", "Expires: Wed, 20 May 2015\
-      \ 01:52:21 GMT\r\n", "Content-type: application/json; charset=UTF-8\r\n", "content-length:\
+  raw_headers: ["Date: Wed, 20 May 2015 02:12:40 GMT\r\n", "expires: Wed, 20 May 2015\
+      \ 02:12:40 GMT\r\n", "content-type: application/json; charset=UTF-8\r\n", "content-length:\
       \ 1761\r\n"]
   reason: OK
   status: 200
   version: 11
-? httplib:GET api.steampowered.com:80/ISteamUser/GetPlayerSummaries/v2?key=DA0509DA52BC706F282F2D315D3C61BB&steamids=%5Bu%2776561197962749510%27%2C+u%2776561197967776245%27%2C+u%2776561197968887113%27%2C+u%2776561197969390960%27%2C+u%2776561197972401735%27%2C+u%2776561197983183628%27%2C+u%2776561198016928199%27%2C+u%2776561198020209451%27%2C+u%2776561198041192286%27%2C+u%2776561198053905190%27%2C+u%2776561198137884154%27%5D&format=json
+? httplib:GET api.steampowered.com:80/ISteamUser/GetPlayerSummaries/v2?key=DA0509DA52BC706F282F2D315D3C61BB&steamids=%5Bu%2776561197962749510%27%2C+u%2776561197967776245%27%2C+u%2776561197968887113%27%2C+u%2776561197969390960%27%2C+u%2776561197972401735%27%2C+u%2776561197979664690%27%2C+u%2776561197980747796%27%2C+u%2776561197983183628%27%2C+u%2776561198016928199%27%2C+u%2776561198020209451%27%2C+u%2776561198041192286%27%2C+u%2776561198053905190%27%2C+u%2776561198137884154%27%5D&format=json
   920b7f94c9b9682fa32fab913befe239 None
 : content: "{\n\t\"response\": {\n\t\t\"players\": [\n\t\t\t{\n\t\t\t\t\"steamid\"\
-    : \"76561198020209451\",\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"\
-    profilestate\": 1,\n\t\t\t\t\"personaname\": \"Jonathan the Epic\",\n\t\t\t\t\"\
-    lastlogoff\": 1431651193,\n\t\t\t\t\"commentpermission\": 1,\n\t\t\t\t\"profileurl\"\
-    : \"http://steamcommunity.com/id/Bendidit/\",\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/da/da5fdfb269d6fe5a5c04a8e8eb4e5bb129c0e29a.jpg\"\
+    : \"76561197983183628\",\n\t\t\t\t\"communityvisibilitystate\": 1,\n\t\t\t\t\"\
+    profilestate\": 1,\n\t\t\t\t\"personaname\": \"Elliot\",\n\t\t\t\t\"lastlogoff\"\
+    : 1272437609,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197983183628/\"\
+    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/bf/bfe8df850317711e3fe9f4c1e2d093da581200e4.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/bf/bfe8df850317711e3fe9f4c1e2d093da581200e4_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/bf/bfe8df850317711e3fe9f4c1e2d093da581200e4_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 0\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198020209451\"\
+    ,\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\
+    \t\t\"personaname\": \"Jonathan the Epic\",\n\t\t\t\t\"lastlogoff\": 1431651193,\n\
+    \t\t\t\t\"commentpermission\": 1,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/id/Bendidit/\"\
+    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/da/da5fdfb269d6fe5a5c04a8e8eb4e5bb129c0e29a.jpg\"\
     ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/da/da5fdfb269d6fe5a5c04a8e8eb4e5bb129c0e29a_medium.jpg\"\
     ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/da/da5fdfb269d6fe5a5c04a8e8eb4e5bb129c0e29a_full.jpg\"\
     ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"realname\": \"Jonathan\",\n\t\t\t\t\
@@ -534,17 +541,18 @@
     ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/e3/e392c88dca726bd4afa9b01a891bee3bc1b27a59_full.jpg\"\
     ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791429521408\"\
     ,\n\t\t\t\t\"timecreated\": 1400968709,\n\t\t\t\t\"personastateflags\": 0\n\t\t\
-    \t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197962749510\",\n\t\t\t\t\"communityvisibilitystate\"\
-    : 3,\n\t\t\t\t\"personaname\": \"ryanhopkins82\",\n\t\t\t\t\"lastlogoff\": 1218325815,\n\
-    \t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197962749510/\"\
-    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791429521408\"\
-    ,\n\t\t\t\t\"timecreated\": 1068776316,\n\t\t\t\t\"personastateflags\": 0\n\t\t\
-    \t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198041192286\",\n\t\t\t\t\"communityvisibilitystate\"\
-    : 1,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"Sarin Kast\",\n\
-    \t\t\t\t\"lastlogoff\": 1431067117,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561198041192286/\"\
+    \t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198016928199\",\n\t\t\t\t\"communityvisibilitystate\"\
+    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"[HS]-konkey\",\n\
+    \t\t\t\t\"lastlogoff\": 1431824584,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561198016928199/\"\
+    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/22/22e00b299cfa742b2cccec5eb6aa1ae666e489b8.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/22/22e00b299cfa742b2cccec5eb6aa1ae666e489b8_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/22/22e00b299cfa742b2cccec5eb6aa1ae666e489b8_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"realname\": \"Konkey\",\n\t\t\t\t\"\
+    primaryclanid\": \"103582791429521408\",\n\t\t\t\t\"timecreated\": 1259172855,\n\
+    \t\t\t\t\"personastateflags\": 0\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198041192286\"\
+    ,\n\t\t\t\t\"communityvisibilitystate\": 1,\n\t\t\t\t\"profilestate\": 1,\n\t\t\
+    \t\t\"personaname\": \"Sarin Kast\",\n\t\t\t\t\"lastlogoff\": 1431067117,\n\t\t\
+    \t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561198041192286/\"\
     ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg\"\
     ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg\"\
     ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg\"\
@@ -557,11 +565,46 @@
     ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/5e/5e6f427c0ef372f95c223b7a6031a88a045f5fac_full.jpg\"\
     ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791431949543\"\
     ,\n\t\t\t\t\"timecreated\": 1323028533,\n\t\t\t\t\"personastateflags\": 0,\n\t\
-    \t\t\t\"loccountrycode\": \"DE\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197967776245\"\
+    \t\t\t\"loccountrycode\": \"DE\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197979664690\"\
     ,\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\
-    \t\t\"personaname\": \"HelRazor\",\n\t\t\t\t\"lastlogoff\": 1410021234,\n\t\t\t\
-    \t\"profileurl\": \"http://steamcommunity.com/profiles/76561197967776245/\",\n\
-    \t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg\"\
+    \t\t\"personaname\": \"JC\",\n\t\t\t\t\"lastlogoff\": 1431732979,\n\t\t\t\t\"\
+    profileurl\": \"http://steamcommunity.com/profiles/76561197979664690/\",\n\t\t\
+    \t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d956bc4013e234d687e01e910297bd80cde68345.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d956bc4013e234d687e01e910297bd80cde68345_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d956bc4013e234d687e01e910297bd80cde68345_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"realname\": \"JC\",\n\t\t\t\t\"primaryclanid\"\
+    : \"103582791429521408\",\n\t\t\t\t\"timecreated\": 1134241650,\n\t\t\t\t\"personastateflags\"\
+    : 0,\n\t\t\t\t\"loccountrycode\": \"US\",\n\t\t\t\t\"locstatecode\": \"CA\"\n\t\
+    \t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197969390960\",\n\t\t\t\t\"communityvisibilitystate\"\
+    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"cRackeR\",\n\t\t\
+    \t\t\"lastlogoff\": 1336451422,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197969390960/\"\
+    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791429521408\"\
+    ,\n\t\t\t\t\"timecreated\": 1097298130,\n\t\t\t\t\"personastateflags\": 0\n\t\t\
+    \t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197968887113\",\n\t\t\t\t\"communityvisibilitystate\"\
+    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"madhare713\",\n\
+    \t\t\t\t\"lastlogoff\": 1204267374,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197968887113/\"\
+    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791429521408\"\
+    ,\n\t\t\t\t\"timecreated\": 1094858134,\n\t\t\t\t\"personastateflags\": 0\n\t\t\
+    \t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197980747796\",\n\t\t\t\t\"communityvisibilitystate\"\
+    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"Wyse Nynja\",\n\
+    \t\t\t\t\"lastlogoff\": 1432015869,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/id/nynjawitay/\"\
+    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/72/725057f3af985a312ce3cb49b3fa5edac0dad699.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/72/725057f3af985a312ce3cb49b3fa5edac0dad699_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/72/725057f3af985a312ce3cb49b3fa5edac0dad699_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"realname\": \"Bryan\",\n\t\t\t\t\"\
+    primaryclanid\": \"103582791430096323\",\n\t\t\t\t\"timecreated\": 1138838266,\n\
+    \t\t\t\t\"personastateflags\": 0,\n\t\t\t\t\"loccountrycode\": \"US\",\n\t\t\t\
+    \t\"locstatecode\": \"CA\",\n\t\t\t\t\"loccityid\": 511\n\t\t\t},\n\t\t\t{\n\t\
+    \t\t\t\"steamid\": \"76561197967776245\",\n\t\t\t\t\"communityvisibilitystate\"\
+    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"HelRazor\",\n\t\
+    \t\t\t\"lastlogoff\": 1410021234,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197967776245/\"\
+    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg\"\
     ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg\"\
     ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg\"\
     ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"realname\": \"fsoileau\",\n\t\t\t\t\
@@ -574,109 +617,64 @@
     ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/26/26b089044fabce332d9fc65696e9fe969bc52a49.jpg\"\
     ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/26/26b089044fabce332d9fc65696e9fe969bc52a49_medium.jpg\"\
     ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/26/26b089044fabce332d9fc65696e9fe969bc52a49_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 0\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198016928199\"\
-    ,\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\
-    \t\t\"personaname\": \"[HS]-konkey\",\n\t\t\t\t\"lastlogoff\": 1431824584,\n\t\
-    \t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561198016928199/\"\
-    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/22/22e00b299cfa742b2cccec5eb6aa1ae666e489b8.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/22/22e00b299cfa742b2cccec5eb6aa1ae666e489b8_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/22/22e00b299cfa742b2cccec5eb6aa1ae666e489b8_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"realname\": \"Konkey\",\n\t\t\t\t\"\
-    primaryclanid\": \"103582791429521408\",\n\t\t\t\t\"timecreated\": 1259172855,\n\
-    \t\t\t\t\"personastateflags\": 0\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197983183628\"\
-    ,\n\t\t\t\t\"communityvisibilitystate\": 1,\n\t\t\t\t\"profilestate\": 1,\n\t\t\
-    \t\t\"personaname\": \"Elliot\",\n\t\t\t\t\"lastlogoff\": 1272437609,\n\t\t\t\t\
-    \"profileurl\": \"http://steamcommunity.com/profiles/76561197983183628/\",\n\t\
-    \t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/bf/bfe8df850317711e3fe9f4c1e2d093da581200e4.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/bf/bfe8df850317711e3fe9f4c1e2d093da581200e4_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/bf/bfe8df850317711e3fe9f4c1e2d093da581200e4_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 0\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197968887113\"\
-    ,\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\
-    \t\t\"personaname\": \"madhare713\",\n\t\t\t\t\"lastlogoff\": 1204267374,\n\t\t\
-    \t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197968887113/\"\
+    ,\n\t\t\t\t\"personastate\": 0\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197962749510\"\
+    ,\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"personaname\": \"ryanhopkins82\"\
+    ,\n\t\t\t\t\"lastlogoff\": 1218325815,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197962749510/\"\
     ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg\"\
     ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg\"\
     ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg\"\
     ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791429521408\"\
-    ,\n\t\t\t\t\"timecreated\": 1094858134,\n\t\t\t\t\"personastateflags\": 0\n\t\t\
-    \t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197969390960\",\n\t\t\t\t\"communityvisibilitystate\"\
-    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"cRackeR\",\n\t\t\
-    \t\t\"lastlogoff\": 1336451422,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197969390960/\"\
-    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791429521408\"\
-    ,\n\t\t\t\t\"timecreated\": 1097298130,\n\t\t\t\t\"personastateflags\": 0\n\t\t\
+    ,\n\t\t\t\t\"timecreated\": 1068776316,\n\t\t\t\t\"personastateflags\": 0\n\t\t\
     \t}\n\t\t]\n\t\t\n\t}\n}"
-  headers: {content-length: '8682', content-type: application/json; charset=UTF-8,
-    date: 'Wed, 20 May 2015 01:52:22 GMT', expires: 'Wed, 20 May 2015 01:52:22 GMT'}
+  headers: {content-length: '10420', content-type: application/json; charset=UTF-8,
+    date: 'Wed, 20 May 2015 02:12:40 GMT', expires: 'Wed, 20 May 2015 02:12:40 GMT'}
   length: 0
-  raw_headers: ["Date: Wed, 20 May 2015 01:52:22 GMT\r\n", "expires: Wed, 20 May 2015\
-      \ 01:52:22 GMT\r\n", "content-type: application/json; charset=UTF-8\r\n", "content-length:\
-      \ 8682\r\n"]
+  raw_headers: ["Date: Wed, 20 May 2015 02:12:40 GMT\r\n", "expires: Wed, 20 May 2015\
+      \ 02:12:40 GMT\r\n", "content-type: application/json; charset=UTF-8\r\n", "content-length:\
+      \ 10420\r\n"]
   reason: OK
   status: 200
   version: 11
-? httplib:GET api.steampowered.com:80/ISteamUser/GetPlayerSummaries/v2?key=DA0509DA52BC706F282F2D315D3C61BB&steamids=%5Bu%2776561197969150625%27%2C+u%2776561197971950003%27%2C+u%2776561197972568105%27%2C+u%2776561197977820643%27%2C+u%2776561197979664690%27%2C+u%2776561197980747796%27%2C+u%2776561197995703478%27%2C+u%2776561198004046679%27%2C+u%2776561198011863996%27%2C+u%2776561198015860708%27%2C+u%2776561198039494282%27%2C+u%2776561198045752498%27%2C+u%2776561198096016427%27%5D&format=json
+? httplib:GET api.steampowered.com:80/ISteamUser/GetPlayerSummaries/v2?key=DA0509DA52BC706F282F2D315D3C61BB&steamids=%5Bu%2776561197969150625%27%2C+u%2776561197971950003%27%2C+u%2776561197972568105%27%2C+u%2776561197977820643%27%2C+u%2776561197995703478%27%2C+u%2776561198004046679%27%2C+u%2776561198011863996%27%2C+u%2776561198015860708%27%2C+u%2776561198039494282%27%2C+u%2776561198045752498%27%2C+u%2776561198096016427%27%5D&format=json
   920b7f94c9b9682fa32fab913befe239 None
 : content: "{\n\t\"response\": {\n\t\t\"players\": [\n\t\t\t{\n\t\t\t\t\"steamid\"\
-    : \"76561198015860708\",\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"\
-    profilestate\": 1,\n\t\t\t\t\"personaname\": \"Fumio\",\n\t\t\t\t\"lastlogoff\"\
-    : 1429651098,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561198015860708/\"\
-    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/bd/bda68823f29351dfb33f08bb2b1479b217b44857.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/bd/bda68823f29351dfb33f08bb2b1479b217b44857_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/bd/bda68823f29351dfb33f08bb2b1479b217b44857_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"realname\": \"James\",\n\t\t\t\t\"\
-    primaryclanid\": \"103582791431949543\",\n\t\t\t\t\"timecreated\": 1258050303,\n\
-    \t\t\t\t\"personastateflags\": 0,\n\t\t\t\t\"loccountrycode\": \"US\",\n\t\t\t\
-    \t\"locstatecode\": \"CA\",\n\t\t\t\t\"loccityid\": 483\n\t\t\t},\n\t\t\t{\n\t\
-    \t\t\t\"steamid\": \"76561197977820643\",\n\t\t\t\t\"communityvisibilitystate\"\
-    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"thatskarobot\"\
-    ,\n\t\t\t\t\"lastlogoff\": 1431903027,\n\t\t\t\t\"commentpermission\": 1,\n\t\t\
-    \t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197977820643/\"\
-    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/4b/4bbeffda09bbd8a9d399fc78701d5c19357c0ddd.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/4b/4bbeffda09bbd8a9d399fc78701d5c19357c0ddd_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/4b/4bbeffda09bbd8a9d399fc78701d5c19357c0ddd_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 1,\n\t\t\t\t\"primaryclanid\": \"103582791433381507\"\
-    ,\n\t\t\t\t\"timecreated\": 1125461627,\n\t\t\t\t\"personastateflags\": 0\n\t\t\
-    \t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197969150625\",\n\t\t\t\t\"communityvisibilitystate\"\
-    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"bandithxi\",\n\t\
-    \t\t\t\"lastlogoff\": 1431942730,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197969150625/\"\
-    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/b5/b54d1a13b86b0aa9dc49a53a64ee7bd1a0a99695.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/b5/b54d1a13b86b0aa9dc49a53a64ee7bd1a0a99695_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/b5/b54d1a13b86b0aa9dc49a53a64ee7bd1a0a99695_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791429524891\"\
-    ,\n\t\t\t\t\"timecreated\": 1096081728,\n\t\t\t\t\"personastateflags\": 0\n\t\t\
-    \t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198004046679\",\n\t\t\t\t\"communityvisibilitystate\"\
-    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"g-man7722\",\n\t\
-    \t\t\t\"lastlogoff\": 1429545326,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561198004046679/\"\
-    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/67/6741a8c7a18b8dadd79dcb45501230759f9d7e05.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/67/6741a8c7a18b8dadd79dcb45501230759f9d7e05_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/67/6741a8c7a18b8dadd79dcb45501230759f9d7e05_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"realname\": \"George Mikhail\",\n\t\
-    \t\t\t\"primaryclanid\": \"103582791430785648\",\n\t\t\t\t\"timecreated\": 1229549632,\n\
-    \t\t\t\t\"personastateflags\": 0\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197995703478\"\
-    ,\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\
-    \t\t\"personaname\": \"Imminent Distraction\",\n\t\t\t\t\"lastlogoff\": 1366959790,\n\
-    \t\t\t\t\"commentpermission\": 1,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197995703478/\"\
+    : \"76561198045752498\",\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"\
+    profilestate\": 1,\n\t\t\t\t\"personaname\": \"zansrule\",\n\t\t\t\t\"lastlogoff\"\
+    : 1432070427,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561198045752498/\"\
+    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791429521408\"\
+    ,\n\t\t\t\t\"timecreated\": 1311346251,\n\t\t\t\t\"personastateflags\": 0\n\t\t\
+    \t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197995703478\",\n\t\t\t\t\"communityvisibilitystate\"\
+    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"Imminent Distraction\"\
+    ,\n\t\t\t\t\"lastlogoff\": 1366959790,\n\t\t\t\t\"commentpermission\": 1,\n\t\t\
+    \t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197995703478/\"\
     ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/90/903f1d54f74e05692b95a4d0bdef7b62f2a8e8ae.jpg\"\
     ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/90/903f1d54f74e05692b95a4d0bdef7b62f2a8e8ae_medium.jpg\"\
     ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/90/903f1d54f74e05692b95a4d0bdef7b62f2a8e8ae_full.jpg\"\
     ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"realname\": \"Damien\",\n\t\t\t\t\"\
     primaryclanid\": \"103582791432407017\",\n\t\t\t\t\"timecreated\": 1199953135,\n\
     \t\t\t\t\"personastateflags\": 0,\n\t\t\t\t\"loccountrycode\": \"US\",\n\t\t\t\
-    \t\"locstatecode\": \"CA\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197980747796\"\
+    \t\"locstatecode\": \"CA\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198096016427\"\
     ,\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\
-    \t\t\"personaname\": \"Wyse Nynja\",\n\t\t\t\t\"lastlogoff\": 1432015869,\n\t\t\
-    \t\t\"profileurl\": \"http://steamcommunity.com/id/nynjawitay/\",\n\t\t\t\t\"\
-    avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/72/725057f3af985a312ce3cb49b3fa5edac0dad699.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/72/725057f3af985a312ce3cb49b3fa5edac0dad699_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/72/725057f3af985a312ce3cb49b3fa5edac0dad699_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"realname\": \"Bryan\",\n\t\t\t\t\"\
-    primaryclanid\": \"103582791430096323\",\n\t\t\t\t\"timecreated\": 1138838266,\n\
-    \t\t\t\t\"personastateflags\": 0,\n\t\t\t\t\"loccountrycode\": \"US\",\n\t\t\t\
-    \t\"locstatecode\": \"CA\",\n\t\t\t\t\"loccityid\": 511\n\t\t\t},\n\t\t\t{\n\t\
-    \t\t\t\"steamid\": \"76561197971950003\",\n\t\t\t\t\"communityvisibilitystate\"\
+    \t\t\"personaname\": \"Wombat Man\",\n\t\t\t\t\"lastlogoff\": 1432013400,\n\t\t\
+    \t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561198096016427/\"\
+    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/3f/3ff9fd29766e4d5fcab75197c8c9d88002b97677.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/3f/3ff9fd29766e4d5fcab75197c8c9d88002b97677_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/3f/3ff9fd29766e4d5fcab75197c8c9d88002b97677_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791429521408\"\
+    ,\n\t\t\t\t\"timecreated\": 1372542485,\n\t\t\t\t\"personastateflags\": 0,\n\t\
+    \t\t\t\"loccountrycode\": \"US\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197969150625\"\
+    ,\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\
+    \t\t\"personaname\": \"bandithxi\",\n\t\t\t\t\"lastlogoff\": 1431942730,\n\t\t\
+    \t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197969150625/\"\
+    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/b5/b54d1a13b86b0aa9dc49a53a64ee7bd1a0a99695.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/b5/b54d1a13b86b0aa9dc49a53a64ee7bd1a0a99695_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/b5/b54d1a13b86b0aa9dc49a53a64ee7bd1a0a99695_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791429524891\"\
+    ,\n\t\t\t\t\"timecreated\": 1096081728,\n\t\t\t\t\"personastateflags\": 0\n\t\t\
+    \t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197971950003\",\n\t\t\t\t\"communityvisibilitystate\"\
     : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"Shmoe\",\n\t\t\t\
     \t\"lastlogoff\": 1428671926,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/id/joeshmoe57/\"\
     ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/aa/aae4ef95fa9fbae6bed164e43376bb4d181bd05d.jpg\"\
@@ -686,63 +684,65 @@
     \t\t\"primaryclanid\": \"103582791429527069\",\n\t\t\t\t\"timecreated\": 1103344822,\n\
     \t\t\t\t\"personastateflags\": 0,\n\t\t\t\t\"loccountrycode\": \"US\",\n\t\t\t\
     \t\"locstatecode\": \"CA\",\n\t\t\t\t\"loccityid\": 511\n\t\t\t},\n\t\t\t{\n\t\
-    \t\t\t\"steamid\": \"76561197972568105\",\n\t\t\t\t\"communityvisibilitystate\"\
-    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"Kobeer Namtab\"\
-    ,\n\t\t\t\t\"lastlogoff\": 1432081107,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/id/kobeer/\"\
-    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/87/871245d5280a9750a86c31c3a4e4ca455a60a4f4.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/87/871245d5280a9750a86c31c3a4e4ca455a60a4f4_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/87/871245d5280a9750a86c31c3a4e4ca455a60a4f4_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 3,\n\t\t\t\t\"realname\": \"Shaun Gustafson\",\n\t\
-    \t\t\t\"primaryclanid\": \"103582791433610290\",\n\t\t\t\t\"timecreated\": 1104266316,\n\
-    \t\t\t\t\"personastateflags\": 0,\n\t\t\t\t\"loccountrycode\": \"US\"\n\t\t\t\
-    },\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198096016427\",\n\t\t\t\t\"communityvisibilitystate\"\
-    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"Wombat Man\",\n\
-    \t\t\t\t\"lastlogoff\": 1432013400,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561198096016427/\"\
-    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/3f/3ff9fd29766e4d5fcab75197c8c9d88002b97677.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/3f/3ff9fd29766e4d5fcab75197c8c9d88002b97677_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/3f/3ff9fd29766e4d5fcab75197c8c9d88002b97677_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791429521408\"\
-    ,\n\t\t\t\t\"timecreated\": 1372542485,\n\t\t\t\t\"personastateflags\": 0,\n\t\
-    \t\t\t\"loccountrycode\": \"US\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197979664690\"\
+    \t\t\t\"steamid\": \"76561197977820643\",\n\t\t\t\t\"communityvisibilitystate\"\
+    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"thatskarobot\"\
+    ,\n\t\t\t\t\"lastlogoff\": 1431903027,\n\t\t\t\t\"commentpermission\": 1,\n\t\t\
+    \t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561197977820643/\"\
+    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/4b/4bbeffda09bbd8a9d399fc78701d5c19357c0ddd.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/4b/4bbeffda09bbd8a9d399fc78701d5c19357c0ddd_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/4b/4bbeffda09bbd8a9d399fc78701d5c19357c0ddd_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 1,\n\t\t\t\t\"primaryclanid\": \"103582791433381507\"\
+    ,\n\t\t\t\t\"timecreated\": 1125461627,\n\t\t\t\t\"personastateflags\": 0\n\t\t\
+    \t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198004046679\",\n\t\t\t\t\"communityvisibilitystate\"\
+    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"g-man7722\",\n\t\
+    \t\t\t\"lastlogoff\": 1429545326,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561198004046679/\"\
+    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/67/6741a8c7a18b8dadd79dcb45501230759f9d7e05.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/67/6741a8c7a18b8dadd79dcb45501230759f9d7e05_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/67/6741a8c7a18b8dadd79dcb45501230759f9d7e05_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"realname\": \"George Mikhail\",\n\t\
+    \t\t\t\"primaryclanid\": \"103582791430785648\",\n\t\t\t\t\"timecreated\": 1229549632,\n\
+    \t\t\t\t\"personastateflags\": 0\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198039494282\"\
     ,\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\
-    \t\t\"personaname\": \"JC\",\n\t\t\t\t\"lastlogoff\": 1431732979,\n\t\t\t\t\"\
-    profileurl\": \"http://steamcommunity.com/profiles/76561197979664690/\",\n\t\t\
-    \t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d956bc4013e234d687e01e910297bd80cde68345.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d956bc4013e234d687e01e910297bd80cde68345_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/d9/d956bc4013e234d687e01e910297bd80cde68345_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"realname\": \"JC\",\n\t\t\t\t\"primaryclanid\"\
-    : \"103582791429521408\",\n\t\t\t\t\"timecreated\": 1134241650,\n\t\t\t\t\"personastateflags\"\
-    : 0,\n\t\t\t\t\"loccountrycode\": \"US\",\n\t\t\t\t\"locstatecode\": \"CA\"\n\t\
-    \t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198011863996\",\n\t\t\t\t\"communityvisibilitystate\"\
-    : 1,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"Randy\",\n\t\t\t\
-    \t\"lastlogoff\": 1432071783,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/id/RandyP/\"\
-    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 0\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198045752498\"\
-    ,\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\
-    \t\t\"personaname\": \"zansrule\",\n\t\t\t\t\"lastlogoff\": 1432070427,\n\t\t\t\
-    \t\"profileurl\": \"http://steamcommunity.com/profiles/76561198045752498/\",\n\
-    \t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg\"\
-    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg\"\
-    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg\"\
-    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791429521408\"\
-    ,\n\t\t\t\t\"timecreated\": 1311346251,\n\t\t\t\t\"personastateflags\": 0\n\t\t\
-    \t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198039494282\",\n\t\t\t\t\"communityvisibilitystate\"\
-    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"adam.ames\",\n\t\
-    \t\t\t\"lastlogoff\": 1428044055,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561198039494282/\"\
+    \t\t\"personaname\": \"adam.ames\",\n\t\t\t\t\"lastlogoff\": 1428044055,\n\t\t\
+    \t\t\"profileurl\": \"http://steamcommunity.com/profiles/76561198039494282/\"\
     ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg\"\
     ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg\"\
     ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg\"\
     ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791429521408\"\
     ,\n\t\t\t\t\"timecreated\": 1300387992,\n\t\t\t\t\"personastateflags\": 0\n\t\t\
-    \t}\n\t\t]\n\t\t\n\t}\n}"
-  headers: {content-length: '10797', content-type: application/json; charset=UTF-8,
-    date: 'Wed, 20 May 2015 01:52:21 GMT', expires: 'Wed, 20 May 2015 01:52:21 GMT'}
+    \t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561197972568105\",\n\t\t\t\t\"communityvisibilitystate\"\
+    : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"Kobeer Namtab\"\
+    ,\n\t\t\t\t\"lastlogoff\": 1432081107,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/id/kobeer/\"\
+    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/87/871245d5280a9750a86c31c3a4e4ca455a60a4f4.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/87/871245d5280a9750a86c31c3a4e4ca455a60a4f4_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/87/871245d5280a9750a86c31c3a4e4ca455a60a4f4_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 1,\n\t\t\t\t\"realname\": \"Shaun Gustafson\",\n\t\
+    \t\t\t\"primaryclanid\": \"103582791433610290\",\n\t\t\t\t\"timecreated\": 1104266316,\n\
+    \t\t\t\t\"personastateflags\": 0,\n\t\t\t\t\"loccountrycode\": \"US\"\n\t\t\t\
+    },\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198011863996\",\n\t\t\t\t\"communityvisibilitystate\"\
+    : 1,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"Randy\",\n\t\t\t\
+    \t\"lastlogoff\": 1432071783,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/id/RandyP/\"\
+    ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 0\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"steamid\": \"76561198015860708\"\
+    ,\n\t\t\t\t\"communityvisibilitystate\": 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\
+    \t\t\"personaname\": \"Fumio\",\n\t\t\t\t\"lastlogoff\": 1429651098,\n\t\t\t\t\
+    \"profileurl\": \"http://steamcommunity.com/profiles/76561198015860708/\",\n\t\
+    \t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/bd/bda68823f29351dfb33f08bb2b1479b217b44857.jpg\"\
+    ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/bd/bda68823f29351dfb33f08bb2b1479b217b44857_medium.jpg\"\
+    ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/bd/bda68823f29351dfb33f08bb2b1479b217b44857_full.jpg\"\
+    ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"realname\": \"James\",\n\t\t\t\t\"\
+    primaryclanid\": \"103582791431949543\",\n\t\t\t\t\"timecreated\": 1258050303,\n\
+    \t\t\t\t\"personastateflags\": 0,\n\t\t\t\t\"loccountrycode\": \"US\",\n\t\t\t\
+    \t\"locstatecode\": \"CA\",\n\t\t\t\t\"loccityid\": 483\n\t\t\t}\n\t\t]\n\t\t\n\
+    \t}\n}"
+  headers: {content-length: '9059', content-type: application/json; charset=UTF-8,
+    date: 'Wed, 20 May 2015 02:12:41 GMT', expires: 'Wed, 20 May 2015 02:12:41 GMT'}
   length: 0
-  raw_headers: ["Date: Wed, 20 May 2015 01:52:21 GMT\r\n", "Expires: Wed, 20 May 2015\
-      \ 01:52:21 GMT\r\n", "Content-type: application/json; charset=UTF-8\r\n", "content-length:\
-      \ 10797\r\n"]
+  raw_headers: ["Date: Wed, 20 May 2015 02:12:41 GMT\r\n", "expires: Wed, 20 May 2015\
+      \ 02:12:41 GMT\r\n", "content-type: application/json; charset=UTF-8\r\n", "content-length:\
+      \ 9059\r\n"]
   reason: OK
   status: 200
   version: 11
