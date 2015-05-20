@@ -1,20 +1,24 @@
 from __future__ import print_function
 
-import flask
+import logging
 import os
 import sys
 
 from flask_debugtoolbar import DebugToolbarExtension
+import flask
 import steam  # https://github.com/Lagg/steamodd
 
 from steam_friends import config, ext
 from steam_friends.views import api, auth, main
 
 
+log = logging.getLogger(__name__)
+
+
 def internal_error(e):
     error_message = "Caught unhandled exception: {}".format(e)
     # flask does this logging in handle_user_exception
-    # flask.current_app.logger.exception(error_message)
+    # log.exception(error_message)
     return flask.render_template('500.html', error_message=error_message), 500
 
 

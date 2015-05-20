@@ -1,9 +1,12 @@
 import functools
+import logging
 
-import flask
 import steam.api
 
 from steam_friends import ext
+
+
+log = logging.getLogger(__name__)
 
 
 @functools.total_ordering
@@ -105,7 +108,7 @@ class SteamUser(object):
         f = []
 
         # todo: only lookup friends that aren't in our cache
-        flask.current_app.logger.info("Checking friends of %s", self)
+        log.info("Checking friends of %s", self)
         friends_response = steam.api.interface('ISteamUser').GetFriendList(
             steamid=self.steamid,
             relationship=relationship,
@@ -114,7 +117,7 @@ class SteamUser(object):
             for friends_data in friends_response['friendslist']['friends']:
                 f.append(friends_data['steamid'])
         except steam.api.HTTPError:
-            flask.current_app.logger.warning("Failed fetching friends for %s", self)
+            log.warning("Failed fetching friends for %s", self)
         return self.get_users(f)
 
     @property
@@ -122,14 +125,14 @@ class SteamUser(object):
     def games(self, include_appinfo=1, include_played_free_games=1):
         g = []
 
-        flask.current_app.logger.info("Checking games of %s", self)
+        log.info("Checking games of %s", self)
         games_response = steam.api.interface('IPlayerService').GetOwnedGames(
             steamid=self.steamid,
             include_appinfo=include_appinfo,
             include_played_free_games=include_played_free_games,
         )
         if games_response['response'] == {}:
-            flask.current_app.logger.warning("Failed fetching games for %s", self)
+            log.warning("Failed fetching games for %s", self)
         else:
             for game_data in games_response['response']['games']:
                 g.append(SteamApp(**game_data))
@@ -186,7 +189,7 @@ class SteamUser(object):
     @ext.cache.memoize(3600)
     def id_to_id64(cls, steamid):
         # todo: cache this
-        flask.current_app.logger.info("Checking for steam64id of %s", steamid)
+        log.info("Checking for steam64id of %s", steamid)
         r = steam.api.interface('ISteamUser').ResolveVanityURL(vanityurl=steamid)
         try:
             return r['response']['steamid']

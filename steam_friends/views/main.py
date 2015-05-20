@@ -1,4 +1,5 @@
 import collections
+import logging
 
 import flask
 import steam
@@ -7,6 +8,8 @@ from steam_friends import models
 
 
 blueprint = flask.Blueprint('steam_friends', __name__)
+
+log = logging.getLogger(__name__)
 
 
 @blueprint.route('/test/error')
@@ -61,12 +64,12 @@ def index():
                 '76561197969428769',  # Son of Themis
                 # '76561197979664690',  # JC
             ]
-    flask.current_app.logger.info("checking users: %r", steamid64s)
+    log.info("checking users: %r", steamid64s)
 
     try:
         steam_users = models.SteamUser.get_users(steamid64s)
     except steam.api.APIError as e:
-        flask.current_app.logger.warning("Steam API Error for users: %s", e)
+        log.warning("Steam API Error for users: %s", e)
         flask.flash("Failed connecting to the steam API", "danger")
         steam_users = []
     else:
@@ -80,14 +83,14 @@ def index():
                 for g in u.games:
                     game_counter[g] += 1
             except steam.api.APIError as e:
-                flask.current_app.logger.warning("Error while querying for games of %s: %s", u, e)
+                log.warning("Error while querying for games of %s: %s", u, e)
                 flask.flash("Error while querying for games of {}".format(u.steamid), "danger")
                 continue
             try:
                 for f in u.friends:
                     friend_counter[f] += 1
             except steam.api.APIError as e:
-                flask.current_app.logger.warning("Error while querying for friends of %s: %s", u, e)
+                log.warning("Error while querying for friends of %s: %s", u, e)
                 flask.flash("Error while querying for friends of {}".format(u), "danger")
                 continue
 

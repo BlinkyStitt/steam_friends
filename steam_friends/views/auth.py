@@ -1,6 +1,6 @@
 import flask
 
-from flask.ext import openid
+# from flask.ext import openid
 
 from steam_friends import ext, models
 
@@ -25,7 +25,7 @@ def login():
         return flask.redirect(ext.oid.get_next_url())
     if flask.request.method == 'POST':
         url = openid.COMMON_PROVIDERS['steam']  # 'https://steamcommunity.com/openid'
-        return ext.oid.try_login(url)
+        return ext.oid.try_login(url)  # 'http://steamcommunity.com/openid')
     return flask.render_template(
         'login.html',
         next=ext.oid.get_next_url(),
