@@ -60,3 +60,7 @@ Setup the production app::
 Run the production app::
 
     uwsgi prod.ini
+
+Run the production app on FreeBSD::
+
+    SSL_CERT_FILE=/usr/local/share/certs/ca-root-nss.crt uwsgi prod.ini
