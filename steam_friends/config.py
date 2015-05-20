@@ -56,6 +56,7 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     CACHE_TYPE = 'redis'
     CACHE_REDIS_PORT = '10002'
+    CACHE_REDIS_HOST = '127.0.0.1'
     CACHE_DEFAULT_TIMEOUT = 60 * 20
     DEBUG = False
     LOGGER_HANDLER_POLICY = 'production'
