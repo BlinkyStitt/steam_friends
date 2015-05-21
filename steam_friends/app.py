@@ -59,10 +59,10 @@ def create_app(app_env=None):
 
     # attach our blueprints
     map(app.register_blueprint, [
-        api.blueprint,
         auth.blueprint,
         main.blueprint,
     ])
+    app.register_blueprint(api.blueprint, url_prefix='/api')
 
     # setup application wide error handlers
     # other error handlers should be attached to their respective blueprints

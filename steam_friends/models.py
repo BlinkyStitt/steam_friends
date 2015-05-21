@@ -59,6 +59,14 @@ class SteamApp(object):
             hash=self._img_logo_url,
         )
 
+    def to_dict(self):
+        return {
+            'appid': self.appid,
+            'name': self.name,
+            'img_logo_url': self._img_logo_url,
+            'img_icon_url': self._img_logo_url,
+        }
+
     # todo: crawl steam's store page and expose a bunch of things
 
 
@@ -72,10 +80,6 @@ class SteamUser(object):
         self.steamid = kwargs['steamid']
         self.personaname = kwargs['personaname']
         self.personastate = kwargs['personastate']
-
-        # these are lazy loaded
-        self._friends = None
-        self._games = None
 
     def __eq__(self, other):
         try:
@@ -137,6 +141,21 @@ class SteamUser(object):
             for game_data in games_response['response']['games']:
                 g.append(SteamApp(**game_data))
         return g
+
+    def to_dict(self, with_friends=True, with_games=True):
+        result = {
+            'avatar': self.avatar,
+            'avatarfull': self.avatarfull,
+            'avatarmedium': self.avatarmedium,
+            'personaname': self.personaname,
+            'personastate': self.personastate,
+            'steamid': self.steamid,
+        }
+        if with_friends:
+            result['friends'] = [f.to_dict(with_friends=False, with_games=False) for f in self.friends]
+        if with_games:
+            result['games'] = [g.to_dict() for g in self.games]
+        return result
 
     @classmethod
     def get_user(cls, steamid64):
