@@ -64,7 +64,7 @@ class SteamApp(object):
             'appid': self.appid,
             'name': self.name,
             'img_logo_url': self._img_logo_url,
-            'img_icon_url': self._img_logo_url,
+            'img_icon_url': self._img_icon_url,
         }
 
     # todo: crawl steam's store page and expose a bunch of things
