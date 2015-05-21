@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-flake8
+./env/bin/flake8
 LINT_EXIT_CODE=$?
 
 echo
-py.test $@
+./env/bin/py.test $@
 TEST_EXIT_CODE=$?
 
 
