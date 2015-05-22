@@ -64,7 +64,6 @@ def index():
                 '76561197969428769',  # Son of Themis
                 # '76561197979664690',  # JC
             ]
-    log.info("checking users: %r", steamid64s)
 
     try:
         steam_users = models.SteamUser.get_users(steamid64s)
@@ -95,6 +94,7 @@ def index():
                 continue
 
     steam_users.sort()
+    log.info("steam users: %s", steam_users)
 
     return flask.render_template(
         'index.html',

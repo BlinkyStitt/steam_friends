@@ -72,4 +72,8 @@ def create_app(app_env=None):
     if app.debug:
         DebugToolbarExtension(app)
 
+    # delete flask's default handlers. https://github.com/mitsuhiko/flask/issues/641
+    # we configure our own logging when we want it
+    del app.logger.handlers[:]
+
     return app

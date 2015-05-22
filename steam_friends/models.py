@@ -179,6 +179,7 @@ class SteamUser(object):
                 continue
 
             u = cls(**cached_data)
+            log.debug("Retrieved from cache: %r", u)
             steamid64s.remove(cached_id)
             users.append(u)
 
@@ -192,7 +193,8 @@ class SteamUser(object):
                 # this shouldn't ever happen
                 continue
             u = cls(**user_data)
-            ext.cache.cache.set(u.steamid, user_data)
+            log.debug("Fetched from steam: %r", u)
+            ext.cache.cache.set(u.steamid, user_data)  # never cache objects
             users.append(u)
 
         return users

@@ -3,26 +3,23 @@ import logging
 import os
 import sys
 
+import flask
+
 from steam_friends import app
 
 
-application = app.create_app(app_env='dev')
-
-# shut up the flask logger
-application.logger
-del logging.getLogger(application.logger_name).handlers[:]
-
-# configure with our log format
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG, format=application.debug_log_format)
-
-# lower level on 3rd party modules
+# configure logging before we do anything
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG, format=flask.Flask.debug_log_format)
 logging.getLogger('werkzeug').setLevel(logging.WARNING)
 
-application.logger.info("Starting %s for development", application)
-
-# these things aren't in the config
+# these things aren't in application.config
 host = os.environ.get("STEAM_FRIENDS_HOST", "localhost")
 port = int(os.environ.get("STEAM_FRIENDS_PORT", 10000))
 
-# do the thing
+application = app.create_app(app_env='dev')
+
+application.logger.info("Starting %s for development at http://%s:%s", application, host, port)
+if application.debug:
+    application.logger.warning("Application debugging enabled! Be sure not to expose this to the Internet!")
+
 application.run(host=host, port=port)
