@@ -112,7 +112,7 @@ class SteamUser(object):
         f = []
 
         # todo: only lookup friends that aren't in our cache
-        log.info("Checking friends of %s", self)
+        log.info("Checking friends of %r", self)
         friends_response = steam.api.interface('ISteamUser').GetFriendList(
             steamid=self.steamid,
             relationship=relationship,
@@ -129,7 +129,7 @@ class SteamUser(object):
     def games(self, include_appinfo=1, include_played_free_games=1):
         g = []
 
-        log.info("Checking games of %s", self)
+        log.info("Checking games of %r", self)
         games_response = steam.api.interface('IPlayerService').GetOwnedGames(
             steamid=self.steamid,
             include_appinfo=include_appinfo,
