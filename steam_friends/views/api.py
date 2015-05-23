@@ -15,3 +15,11 @@ def steam_user(steamid64):
     if su is None:
         return flask.jsonify({}), 404
     return flask.jsonify(su.to_dict())
+
+
+@blueprint.route('/steam_app/<appid>', methods=['GET'])
+def steam_app(appid):
+    sa = models.SteamApp(appid=appid)
+    if sa is None:
+        return flask.jsonify({}), 404
+    return flask.jsonify(sa.to_dict(with_details=True))

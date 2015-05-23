@@ -2,6 +2,7 @@ import functools
 import logging
 
 import steam.api
+import requests
 
 from steam_friends import ext
 
@@ -14,14 +15,23 @@ class SteamApp(object):
 
     image_url = "http://media.steampowered.com/steamcommunity/public/images/apps/{appid}/{hash}.jpg"
 
+    # eventhough this says "appids", it returns null when given multiple values
+    details_url = "http://store.steampowered.com/api/appdetails/?appids={appid}"
+
     def __init__(self, **kwargs):
-        self.appid = kwargs['appid']
-        self.name = kwargs['name'].encode('ascii', 'ignore')  # todo: what should we do here?
+        self._img_icon_hash = self._img_logo_hash = self._name = None
 
-        self._img_logo_url = kwargs['img_logo_url']
-        self._img_icon_url = kwargs['img_icon_url']
+        self.appid = kwargs.pop('appid')
 
-        # there are more attributes than this, but we don't need them
+        # this may have been given, or it may come from appdetails
+        self.name = kwargs.pop('name', None)
+
+        # these are actually just hashes and not full urls
+        # setting them sets the cache. setting them to None queries the cache
+        self.img_logo_hash = kwargs.pop('img_logo_url', None)
+        self.img_icon_hash = kwargs.pop('img_icon_url', None)
+
+        log.debug("extra args for %r: %s", self, kwargs)
 
     def __eq__(self, other):
         try:
@@ -46,28 +56,96 @@ class SteamApp(object):
         return self.name
 
     @property
+    @ext.cache.memoize(3600)
+    def app_details(self):
+        # fetch any users not in the cache
+        r = requests.get(self.details_url.format(
+            appid=self.appid,
+        ))
+
+        log.debug("request: %s", r.text)
+
+        app_json = r.json()[str(self.appid)]
+
+        if not app_json or 'success' not in app_json or not app_json['success']:
+            # log something here?
+            # abort caching?
+            return
+
+        return app_json['data']
+
+    @property
+    def img_icon_hash_key(self):
+        return "{}:img_icon_hash:{}".format(self.__class__.__name__, self.appid)
+
+    @property
+    def img_icon_hash(self):
+        if self._img_icon_hash is None:
+            self._img_icon_hash = ext.cache.cache.get(self.img_icon_hash_key)
+        return self._img_icon_hash
+
+    @img_icon_hash.setter
+    def img_icon_hash(self, value):
+        if value is not None:
+            ext.cache.cache.set(self.img_icon_hash_key, value)
+        self._img_icon_hash = value
+
+    @property
     def img_icon_url(self):
+        if not self.img_icon_hash:
+            return
         return self.image_url.format(
             appid=self.appid,
-            hash=self._img_icon_url,
+            hash=self.img_icon_hash,
         )
 
     @property
+    def img_logo_hash_key(self):
+        return "{}:img_logo_hash:{}".format(self.__class__.__name__, self.appid)
+
+    @property
+    def img_logo_hash(self):
+        if self._img_logo_hash is None:
+            self._img_logo_hash = ext.cache.cache.get(self.img_logo_hash_key)
+        return self._img_logo_hash
+
+    @img_logo_hash.setter
+    def img_logo_hash(self, value):
+        if value is not None:
+            ext.cache.cache.set(self.img_logo_hash_key, value)
+        self._img_logo_hash = value
+
+    @property
     def img_logo_url(self):
+        if not self.img_logo_hash:
+            return
         return self.image_url.format(
             appid=self.appid,
-            hash=self._img_logo_url,
+            hash=self.img_logo_hash,
         )
 
-    def to_dict(self):
-        return {
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        if value is None:
+            value = self.app_details['name']
+
+        # todo: how should we actually handle encoding?
+        self._name = value.encode('ascii', 'ignore')
+
+    def to_dict(self, with_details=False):
+        data = {
             'appid': self.appid,
             'name': self.name,
-            'img_logo_url': self._img_logo_url,
-            'img_icon_url': self._img_icon_url,
+            'img_logo_url': self.img_logo_url,
+            'img_icon_url': self.img_icon_url,
         }
-
-    # todo: crawl steam's store page and expose a bunch of things
+        if with_details:
+            data['app_details'] = self.app_details
+        return data
 
 
 @functools.total_ordering
@@ -78,7 +156,7 @@ class SteamUser(object):
         self.avatarmedium = kwargs['avatarmedium']
         self.avatarfull = kwargs['avatarfull']
         self.steamid = kwargs['steamid']
-        self.personaname = kwargs['personaname']
+        self.personaname = kwargs['personaname'].encode('ascii', 'ignore')  # todo: improve this
         self.personastate = kwargs['personastate']
 
     def __eq__(self, other):
