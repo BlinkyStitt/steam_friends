@@ -2,4 +2,5 @@ Flask
 Flask-Cache
 Flask-DebugToolbar
 flask-openid
+requests
 steamodd
