@@ -24,6 +24,7 @@ class SteamApp(object):
     # these appids don't seem to have store pages but are still returned in games lists...
     # todo: figure out what all these actually are if they aren't games
     skipped_appids = (
+        '2430',
         '12170',
         '12180',
         '12230',
