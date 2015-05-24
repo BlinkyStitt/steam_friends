@@ -32,6 +32,8 @@ Run the development server::
 View the development server::
 
     open http://127.0.0.1:10000/
+    open http://127.0.0.1:10000/api/steam_app/239140?with_details=1
+    open http://127.0.0.1:10000/api/steam_user/Arizzo?with_friends=1&with_games=1
 
 
 Testing
