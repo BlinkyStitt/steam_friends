@@ -1,8 +1,10 @@
+from __future__ import absolute_import
+
 import functools
 import logging
 
-import steam.api
 import requests
+import steam.api
 
 from steam_friends import ext
 
@@ -18,10 +20,10 @@ class SteamApp(object):
     # eventhough this says "appids", it returns null when given multiple values
     details_url = "http://store.steampowered.com/api/appdetails/?appids={appid}"
 
-    def __init__(self, **kwargs):
+    def __init__(self, appid, **kwargs):
         self._img_icon_hash = self._img_logo_hash = self._name = None
 
-        self.appid = kwargs.pop('appid')
+        self.appid = appid
 
         # this may have been given, or it may come from appdetails
         self.name = kwargs.pop('name', None)
@@ -30,6 +32,14 @@ class SteamApp(object):
         # setting them sets the cache. setting them to None queries the cache
         self.img_logo_hash = kwargs.pop('img_logo_url', None)
         self.img_icon_hash = kwargs.pop('img_icon_url', None)
+
+        try:
+            # pre-emptively fill caches
+            # task_id = get_app_details.delay(self.steamid)  # this misses our config :'(
+            task_id = ext.flask_celery.get_task('get_app_details').delay(self.appid)
+            log.debug("queued get_app_details: %s", task_id)
+        except Exception as e:
+            log.warning("Unable to queue celery: %s", e)
 
         log.debug("extra args for %r: %s", self, kwargs)
 
@@ -154,13 +164,23 @@ class SteamApp(object):
 @functools.total_ordering
 class SteamUser(object):
 
-    def __init__(self, **kwargs):
-        self.avatar = kwargs['avatar']
-        self.avatarmedium = kwargs['avatarmedium']
-        self.avatarfull = kwargs['avatarfull']
-        self.steamid = kwargs['steamid']
-        self.personaname = kwargs['personaname'].encode('ascii', 'ignore')  # todo: improve this
-        self.personastate = kwargs['personastate']
+    def __init__(self, steamid, **kwargs):
+        self.steamid = steamid  # should this really be named steamid64
+
+        self.avatar = kwargs.pop('avatar', None)
+        self.avatarmedium = kwargs.pop('avatarmedium', None)
+        self.avatarfull = kwargs.pop('avatarfull', None)
+        self.personaname = kwargs.pop('personaname', '').encode('ascii', 'ignore')  # todo: improve this
+        self.personastate = kwargs.pop('personastate', None)
+
+        try:
+            # pre-emptively fill caches
+            # task_id = get_friends_of_friends.delay(self.steamid)  # this misses our config :'(
+            task_id = ext.flask_celery.get_task('get_friends_of_friends').delay(self.steamid)
+            log.debug("queued get_app_details: %s", task_id)
+        except Exception as e:
+            # todo: wtf is going on here?! why is this using the normal config
+            log.exception("Unable to queue celery: %s", e)
 
     def __eq__(self, other):
         try:
@@ -297,3 +317,22 @@ class SteamUser(object):
             return r['response']['steamid']
         except (KeyError, steam.api.HTTPError):
             return None
+
+
+@ext.flask_celery.task(rate='100/m')
+def get_app_details(appid):
+    """Populate SteamApp.app_details cache."""
+    sa = SteamApp(appid)
+    sa.app_details
+
+
+@ext.flask_celery.task(rate='100/m')
+def get_friends_of_friends(steamid64, with_games=False):
+    """Populate SteamUser cache."""
+    su = SteamUser(steamid64)
+
+    for f in su.friends:
+        if with_games:
+            for ff in f.friends:
+                for g in ff.games:
+                    get_app_details.delay(g.appid)

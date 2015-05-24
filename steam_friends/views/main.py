@@ -103,3 +103,10 @@ def index():
         passed_ids=passed_ids,
         steam_users=steam_users,
     )
+
+
+def internal_error(e):
+    error_message = "Caught unhandled exception: {}".format(e)
+    # flask does this logging in handle_user_exception
+    # log.exception(error_message)
+    return flask.render_template('500.html', error_message=error_message), 500

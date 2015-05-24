@@ -7,6 +7,7 @@ Developing
 
 Initial Setup::
 
+    brew install redis
     virtualenv env
     . env/bin/activate
     pip install -r requirements-dev.txt
@@ -25,9 +26,21 @@ Build the static files::
     cd static
     grunt
 
+Start the cache/queue server::
+
+    redis-server --port 10002
+
+Run the development async workers::
+
+    ./cli.py celery
+
 Run the development server::
 
-    ./dev.py
+    ./cli.py http
+
+Soon: Use uwsgi to start all of the above::
+
+    uwsgi dev.ini
 
 View the development server::
 
@@ -58,6 +71,10 @@ Setup the production app::
 
     virtualenv env
     env/bin/pip install -r requirements-prod.txt
+
+Run the production async workers::
+
+    ./cli.py --env prod celery
 
 Run the production app::
 

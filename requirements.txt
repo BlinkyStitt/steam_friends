@@ -1,6 +1,9 @@
+click
+celery
 Flask
 Flask-Cache
 Flask-DebugToolbar
 flask-openid
+msgpack-python
 requests
 steamodd

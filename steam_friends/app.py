@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from __future__ import print_function
 
 import logging
@@ -13,13 +14,6 @@ from steam_friends.views import api, auth, main
 
 
 log = logging.getLogger(__name__)
-
-
-def internal_error(e):
-    error_message = "Caught unhandled exception: {}".format(e)
-    # flask does this logging in handle_user_exception
-    # log.exception(error_message)
-    return flask.render_template('500.html', error_message=error_message), 500
 
 
 def create_app(app_env=None):
@@ -54,6 +48,8 @@ def create_app(app_env=None):
 
     # setup apis and extensions
     steam.api.key.set(app.config['STEAMODD_API_KEY'])
+
+    ext.flask_celery.init_app(app)
     ext.cache.init_app(app)
     ext.oid.init_app(app)
 
@@ -66,7 +62,7 @@ def create_app(app_env=None):
 
     # setup application wide error handlers
     # other error handlers should be attached to their respective blueprints
-    app.error_handler_spec[None][500] = internal_error
+    app.error_handler_spec[None][500] = main.internal_error
 
     # dev only things go here
     if app.debug:

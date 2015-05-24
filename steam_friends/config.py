@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import logging
 
 
@@ -5,8 +7,13 @@ log = logging.getLogger(__name__)
 
 
 class Config(object):
+    CELERYD_HIJACK_ROOT_LOGGER = False
     CACHE_DEFAULT_TIMEOUT = 60 * 20
-    CACHE_TYPE = 'simple'
+    CACHE_REDIS_DB = 0
+    CACHE_REDIS_HOST = 'localhost'
+    CACHE_REDIS_PORT = '10002'
+    CACHE_TYPE = 'redis'
+    BROKER_URL = 'redis://localhost:10002/1'
     DEBUG = False
     LOGGER_NAME = 'flask'
     OPENID_FS_STORE_PATH = "/tmp/steam_friends/openid"
@@ -26,8 +33,6 @@ class DevelopmentConfig(Config):
 
 
 class ProductionConfig(Config):
-    CACHE_REDIS_PORT = '10002'
-    CACHE_REDIS_HOST = '127.0.0.1'
     CACHE_TYPE = 'redis'
     DEBUG = False
 
