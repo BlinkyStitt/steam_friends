@@ -1,3 +1,15 @@
+? httplib:GET api.steampowered.com:80/ISteamUser/GetPlayerSummaries/v2?key=DA0509DA52BC706F282F2D315D3C61BB&steamids=%5B%270000%27%5D&format=json
+  920b7f94c9b9682fa32fab913befe239 None
+: content: "{\n\t\"response\": {\n\t\t\"players\": [\n\n\t\t]\n\t\t\n\t}\n}"
+  headers: {content-length: '44', content-type: application/json; charset=UTF-8, date: 'Sun,
+      24 May 2015 21:36:08 GMT', expires: 'Sun, 24 May 2015 21:36:08 GMT'}
+  length: 0
+  raw_headers: ["Date: Sun, 24 May 2015 21:36:08 GMT\r\n", "expires: Sun, 24 May 2015\
+      \ 21:36:08 GMT\r\n", "content-type: application/json; charset=UTF-8\r\n", "content-length:\
+      \ 44\r\n"]
+  reason: OK
+  status: 200
+  version: 11
 ? httplib:GET api.steampowered.com:80/ISteamUser/GetPlayerSummaries/v2?key=DA0509DA52BC706F282F2D315D3C61BB&steamids=0000&format=json
   920b7f94c9b9682fa32fab913befe239 None
 : content: "{\n\t\"response\": {\n\t\t\"players\": [\n\n\t\t]\n\t\t\n\t}\n}"
