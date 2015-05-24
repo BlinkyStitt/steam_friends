@@ -2,11 +2,12 @@ from __future__ import absolute_import
 
 import functools
 import logging
+import random
 
 import requests
 import steam.api
 
-from steam_friends import ext
+from steam_friends import exc, ext
 
 
 log = logging.getLogger(__name__)
@@ -20,7 +21,26 @@ class SteamApp(object):
     # eventhough this says "appids", it returns null when given multiple values
     details_url = "http://store.steampowered.com/api/appdetails/?appids={appid}"
 
-    def __init__(self, appid, **kwargs):
+    # these appids don't seem to have store pages but are still returned in games lists...
+    # todo: figure out what all these actually are if they aren't games
+    skipped_appids = (
+        '12170',
+        '12180',
+        '12230',
+        '12240',
+        '12250',
+        '18110',
+        '201280',
+        '205790',
+        '219540',
+        '223530',
+        '228200',
+        '28050',
+        '367540',
+        '44320',
+    )
+
+    def __init__(self, appid, queue_details=False, **kwargs):
         self._img_icon_hash = self._img_logo_hash = self._name = None
 
         self.appid = appid
@@ -33,15 +53,16 @@ class SteamApp(object):
         self.img_logo_hash = kwargs.pop('img_logo_url', None)
         self.img_icon_hash = kwargs.pop('img_icon_url', None)
 
-        try:
-            # pre-emptively fill caches
-            # task_id = get_app_details.delay(self.steamid)  # this misses our config :'(
-            task_id = ext.flask_celery.get_task('get_app_details').delay(self.appid)
-            log.debug("queued get_app_details: %s", task_id)
-        except Exception as e:
-            log.warning("Unable to queue celery: %s", e)
+        if queue_details:
+            try:
+                # pre-emptively fill caches
+                # task_id = get_app_details.delay(self.steamid)  # this should work, but it misses our config :'(
+                task_id = ext.flask_celery.get_task('get_app_details').delay(self.appid)
+                log.debug("queued get_app_details: %s", task_id)
+            except Exception as e:
+                log.warning("Unable to queue get_app_details: %s", e)
 
-        log.debug("extra args for %r: %s", self, kwargs)
+        # log.debug("extra args for %r: %s", self, kwargs)
 
     def __eq__(self, other):
         try:
@@ -56,40 +77,55 @@ class SteamApp(object):
         return hash(self.appid)
 
     def __repr__(self):
-        return "{cls}(appid={appid}, name={name})".format(
+        # we can't include self.name in this because steam api may have been rate limited
+        return "{cls}(appid={appid})".format(
             cls=self.__class__.__name__,
             appid=self.appid,
-            name=self.name,
         )
 
     def __str__(self):
         return self.name
 
     @property
-    @ext.cache.memoize(3600)
+    def app_details_key(self):
+        return "{!r}:app_details".format(self, self.appid)
+
+    # todo: cache result in flask.g
+    @property
     def app_details(self):
-        # fetch any users not in the cache
-        details_url = self.details_url.format(
-            appid=self.appid,
-        )
-        r = requests.get(details_url)
+        # cache memoize doesn't work well for us here because we dont want to cache api failures
 
-        try:
-            app_json = r.json()[str(self.appid)]
-        except (TypeError, KeyError):
-            log.error("error processing %s: %s", details_url, r.text)
-            app_json = None
-
-        if not app_json or 'success' not in app_json or not app_json['success']:
-            # log something here?
-            # abort caching?
+        if self.appid in self.skipped_appids:
             return
 
-        return app_json['data']
+        cache_key = self.app_details_key
+        cached_app_details = ext.cache.cache.get(cache_key)
+        if not cached_app_details:
+
+            # fetch any users not in the cache
+            details_url = self.details_url.format(
+                appid=self.appid,
+            )
+            r = requests.get(details_url)
+
+            try:
+                app_json = r.json()[str(self.appid)]
+            except (TypeError, KeyError):
+                app_json = None
+
+            # sometimes we get back "null" sometimes "success == failed"
+            if not app_json or 'success' not in app_json or not app_json['success']:
+                log.warning("Failed querying %s: %s", details_url, r.text)
+                return
+
+            cached_app_details = app_json['data']
+            ext.cache.cache.set(cache_key, cached_app_details)
+
+        return cached_app_details
 
     @property
     def img_icon_hash_key(self):
-        return "{}:img_icon_hash:{}".format(self.__class__.__name__, self.appid)
+        return "{!r}:img_icon_hash".format(self, self.appid)
 
     @property
     def img_icon_hash(self):
@@ -114,7 +150,7 @@ class SteamApp(object):
 
     @property
     def img_logo_hash_key(self):
-        return "{}:img_logo_hash:{}".format(self.__class__.__name__, self.appid)
+        return "{!r}:img_logo_hash".format(self, self.appid)
 
     @property
     def img_logo_hash(self):
@@ -144,7 +180,11 @@ class SteamApp(object):
     @name.setter
     def name(self, value):
         if value is None:
-            value = self.app_details['name']
+            if self.app_details:
+                value = self.app_details['name']
+            else:
+                # todo: not sure about this
+                raise exc.SteamApiException("Could not find name for %r" % self)
 
         # todo: how should we actually handle encoding?
         self._name = value.encode('ascii', 'ignore')
@@ -164,7 +204,7 @@ class SteamApp(object):
 @functools.total_ordering
 class SteamUser(object):
 
-    def __init__(self, steamid, **kwargs):
+    def __init__(self, steamid, queue_friends_of_friends=False, **kwargs):
         self.steamid = steamid  # should this really be named steamid64
 
         self.avatar = kwargs.pop('avatar', None)
@@ -173,14 +213,15 @@ class SteamUser(object):
         self.personaname = kwargs.pop('personaname', '').encode('ascii', 'ignore')  # todo: improve this
         self.personastate = kwargs.pop('personastate', None)
 
-        try:
-            # pre-emptively fill caches
-            # task_id = get_friends_of_friends.delay(self.steamid)  # this misses our config :'(
-            task_id = ext.flask_celery.get_task('get_friends_of_friends').delay(self.steamid)
-            log.debug("queued get_app_details: %s", task_id)
-        except Exception as e:
-            # todo: wtf is going on here?! why is this using the normal config
-            log.exception("Unable to queue celery: %s", e)
+        if queue_friends_of_friends:
+            try:
+                # pre-emptively fill caches
+                # task_id = get_friends_of_friends.delay(self.steamid)  # this should work, but it misses our config
+                task_id = ext.flask_celery.get_task('get_friends_of_friends').delay(self.steamid)
+                log.debug("queued get_friends_of_friends(%r): %s", self, task_id)
+            except Exception as e:
+                # todo: wtf is going on here?! why is this using the normal config
+                log.exception("Unable to queue get_friends_of_friends: %s", e)
 
     def __eq__(self, other):
         try:
@@ -201,19 +242,20 @@ class SteamUser(object):
         return self.personaname
 
     def __repr__(self):
-        return "{cls}(steamid='{steamid}', personaname='{personaname}')".format(
+        # we can't include self.personaname in this because steam api may have been rate limited
+        return "{cls}(steamid='{steamid}')".format(
             cls=self.__class__.__name__,
             steamid=self.steamid,
-            personaname=self.personaname,
         )
 
     @property
-    @ext.cache.memoize(3600)
-    def friends(self, relationship='friend'):
+    @ext.cache.memoize()
+    def friends(self, queue_friends_of_friends=False, relationship='friend'):
+        # todo: this is a property, but it has kwargs...
         f = []
 
         # todo: only lookup friends that aren't in our cache
-        log.info("Checking friends of %r", self)
+        log.info("Fetching friends of %r", self)
         friends_response = steam.api.interface('ISteamUser').GetFriendList(
             steamid=self.steamid,
             relationship=relationship,
@@ -222,25 +264,29 @@ class SteamUser(object):
             for friends_data in friends_response['friendslist']['friends']:
                 f.append(friends_data['steamid'])
         except steam.api.HTTPError:
-            log.warning("Failed fetching friends for %s", self)
-        return self.get_users(f)
+            log.warning("Failed fetching friends of %r", self)
+        return self.get_users(f, queue_friends_of_friends=queue_friends_of_friends)
 
     @property
-    @ext.cache.memoize(3600)
-    def games(self, include_appinfo=1, include_played_free_games=1):
+    @ext.cache.memoize()
+    def games(self, include_appinfo=1, include_played_free_games=1, queue_details=1):
+        # todo: this is a property, but it has kwargs...
         g = []
 
-        log.info("Checking games of %r", self)
+        log.info("Fetching games of %r", self)
         games_response = steam.api.interface('IPlayerService').GetOwnedGames(
             steamid=self.steamid,
             include_appinfo=include_appinfo,
             include_played_free_games=include_played_free_games,
         )
         if games_response['response'] == {}:
-            log.warning("Failed fetching games for %s", self)
+            log.warning("Failed fetching games of %r", self)
         else:
             for game_data in games_response['response']['games']:
-                g.append(SteamApp(**game_data))
+                # todo: sometimes string, sometimes int...
+                if str(game_data['appid']) in SteamApp.skipped_appids:
+                    continue
+                g.append(SteamApp(queue_details=queue_details, **game_data))
         return g
 
     def to_dict(self, with_friends=True, with_games=True, with_game_details=False):
@@ -260,8 +306,11 @@ class SteamUser(object):
         return result
 
     @classmethod
-    def get_user(cls, steamid64):
-        users = cls.get_users(steamid64)
+    def get_user(cls, steamid64, queue_friends_of_friends=False):
+        users = cls.get_users(
+            [steamid64],
+            queue_friends_of_friends=queue_friends_of_friends,
+        )
 
         if not users:
             return None
@@ -270,34 +319,45 @@ class SteamUser(object):
         return users[0]
 
     @classmethod
-    def get_users(cls, steamid64s):
+    def get_users(cls, steamid64s, queue_friends_of_friends=False):
         users = []
 
+        if not steamid64s:
+            return users
+
+        cache_key_template = cls.__name__ + ':{}'
+
         # fetch any users in the cache
-        cached_users = ext.cache.cache.get_dict(*steamid64s)
-        for cached_id, cached_data in cached_users.iteritems():
+        cached_user_keys = [cache_key_template.format(i) for i in steamid64s]
+        cached_users = ext.cache.cache.get_dict(*cached_user_keys)
+        for cached_data in cached_users.itervalues():
             if not cached_data:
                 # this shouldn't ever happen
                 continue
 
             u = cls(**cached_data)
-            log.debug("Retrieved from cache: %r", u)
-            steamid64s.remove(cached_id)
-            users.append(u)
 
-        # fetch any users not in the cache
-        users_response = steam.api.interface('ISteamUser').GetPlayerSummaries(
-            steamids=steamid64s,
-            version=2,
-        )
-        for user_data in users_response['response']['players']:
-            if not user_data:
-                # this shouldn't ever happen
-                continue
-            u = cls(**user_data)
-            log.debug("Fetched from steam: %r", u)
-            ext.cache.cache.set(u.steamid, user_data)  # never cache objects
+            steamid64s.remove(u.steamid)
             users.append(u)
+        log.debug("Retrieved from cache: %s", users)
+
+        if steamid64s:
+            # fetch any users not in the cache
+            users_response = steam.api.interface('ISteamUser').GetPlayerSummaries(
+                steamids=steamid64s,
+                version=2,
+            )
+            for user_data in users_response['response']['players']:
+                if not user_data:
+                    # this shouldn't ever happen
+                    continue
+                u = cls(queue_friends_of_friends=queue_friends_of_friends, **user_data)
+
+                cache_key = cache_key_template.format(u.steamid)
+
+                ext.cache.cache.set(cache_key, user_data)  # never cache objects
+                users.append(u)
+            log.debug("Fetched from steam: %s", steamid64s)
 
         return users
 
@@ -308,7 +368,7 @@ class SteamUser(object):
         return claim_id[len('http://steamcommunity.com/openid/id/'):]
 
     @classmethod
-    @ext.cache.memoize(3600)
+    @ext.cache.memoize()
     def id_to_id64(cls, steamid):
         # todo: cache this
         log.info("Checking for steam64id of %s", steamid)
@@ -319,20 +379,44 @@ class SteamUser(object):
             return None
 
 
-@ext.flask_celery.task(rate='100/m')
-def get_app_details(appid):
+# this is an undocumented endpoint and seems to get rate limited a lot
+@ext.flask_celery.task(bind=True, rate='8/s')
+def get_app_details(self, appid):
     """Populate SteamApp.app_details cache."""
-    sa = SteamApp(appid)
-    sa.app_details
+    game_count = 0
+    try:
+        sa = SteamApp(appid)
+        if not sa.app_details:
+            raise exc.SteamApiException("No app_details for %r" % sa)
+        game_count += 1
+    except exc.SteamFriendsException as e:
+        raise self.retry(exc=e, countdown=90 * random.randint(1, 3))
+
+    log.info("Queued fetch of %d games", game_count)
+    return game_count
 
 
-@ext.flask_celery.task(rate='100/m')
-def get_friends_of_friends(steamid64, with_games=False):
+@ext.flask_celery.task(bind=True, rate='50/s')
+def get_friends_of_friends(self, steamid64, with_games=False):
     """Populate SteamUser cache."""
-    su = SteamUser(steamid64)
+    friend_count = 0
+    game_count = 0
+    try:
+        su = SteamUser(steamid64, queue_friends_of_friends=False)
+        for f in su.friends:
+            friend_count += 1
+            if with_games:
+                game_count += len(f.games)
 
-    for f in su.friends:
-        if with_games:
+            # todo: this balloons out to WAY too many tasks
+            """
             for ff in f.friends:
-                for g in ff.games:
-                    get_app_details.delay(g.appid)
+                friend_count += 1
+                if with_games:
+                    game_count += len(ff.games)
+            """
+    except exc.SteamFriendsException as e:
+        raise self.retry(exc=e, countdown=90 * random.randint(1, 3))
+
+    log.info("Queued fetch of %d friends and %d games", friend_count, game_count)
+    return friend_count, game_count

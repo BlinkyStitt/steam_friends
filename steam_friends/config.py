@@ -8,7 +8,7 @@ log = logging.getLogger(__name__)
 
 class Config(object):
     CELERYD_HIJACK_ROOT_LOGGER = False
-    CACHE_DEFAULT_TIMEOUT = 60 * 20
+    CACHE_DEFAULT_TIMEOUT = 60 * 60
     CACHE_REDIS_DB = 0
     CACHE_REDIS_HOST = 'localhost'
     CACHE_REDIS_PORT = '10002'

@@ -66,7 +66,7 @@ def index():
             ]
 
     try:
-        steam_users = models.SteamUser.get_users(steamid64s)
+        steam_users = models.SteamUser.get_users(steamid64s, queue_friends_of_friends=True)
     except steam.api.APIError as e:
         log.warning("Steam API Error for users: %s", e)
         flask.flash("Failed connecting to the steam API", "danger")

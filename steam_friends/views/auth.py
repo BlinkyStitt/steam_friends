@@ -13,7 +13,7 @@ def after_login(resp):
     flask.session['openid'] = resp.identity_url
     steamid = models.SteamUser.id_from_openid(resp.identity_url)
     flask.g.steamid = steamid
-    flask.g.steam_user = u = models.SteamUser.get_user(steamid)
+    flask.g.steam_user = u = models.SteamUser.get_user(steamid, queue_friends_of_friends=True)
     flask.flash('Welcome, {}!'.format(u), 'info')
     return flask.redirect(ext.oid.get_next_url())
 

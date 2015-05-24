@@ -26,7 +26,9 @@ class FlaskCelery(object):
             self.init_app(self.app)
 
     def init_app(self, app):
-        """Load the app's config into the celery object
+        """Load the app's config into the celery object.
+
+        .. IMPORTANT:: all tasks MUST be imported before init_app is called
 
         .. TODO:: how will we handle config reloading making it to celery?
         """
@@ -41,10 +43,10 @@ class FlaskCelery(object):
         app.config.setdefault('CELERY_TASK_SERIALIZER', 'msgpack')
         app.config.setdefault('CELERYD_HIJACK_ROOT_LOGGER', False)
 
+        # this has more in it than we need, but that's okay
         config_data = app.config
 
         # setup routing
-        # all tasks have to be imported before init_app is called. ShappyFlask.__init__ handles this
         if not self._tasks_to_register:
             log.warning("No tasks registered")
         else:
@@ -110,6 +112,7 @@ class FlaskCelery(object):
             queue = kwargs.pop('queue', None)
             routing_key = kwargs.pop('routing_key', None)
 
+            # todo: use celery.current_app.task?
             func = celery.shared_task(*args, **kwargs)(func)
 
             self._tasks_to_register[func.name] = (queue, exchange, routing_key)
@@ -132,7 +135,9 @@ class FlaskCelery(object):
 flask_celery = FlaskCelery()
 
 
+"""
 @celery.signals.setup_logging.connect
 def celery_logging(*args, **kwargs):
     # stop celery from hijacking the logger
     pass
+"""

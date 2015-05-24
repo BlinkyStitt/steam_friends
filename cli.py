@@ -6,13 +6,21 @@ import shlex
 import sys
 
 import click
-import flask
 
 from steam_friends import app
 
 
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG, format=flask.Flask.debug_log_format)
-logging.getLogger('celery').setLevel(logging.INFO)
+# similar to flask.app.Flask.debug_log_format
+debug_log_format = (
+    '-' * 80 + '\n' +
+    '%(levelname)s in %(name)s [%(pathname)s:%(lineno)d]:\n' +
+    '%(message)s\n' +
+    '-' * 80
+)
+
+
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG, format=debug_log_format)
+logging.getLogger('celery').setLevel(logging.WARNING)
 logging.getLogger('werkzeug').setLevel(logging.WARNING)
 
 log = logging.getLogger(__name__)
