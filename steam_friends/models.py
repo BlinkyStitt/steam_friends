@@ -408,13 +408,11 @@ def get_friends_of_friends(self, steamid64, with_games=False):
             if with_games:
                 game_count += len(f.games)
 
-            # todo: this balloons out to WAY too many tasks
-            """
             for ff in f.friends:
                 friend_count += 1
-                if with_games:
+                if False and with_games:
+                    # todo: this balloons out to WAY too many tasks
                     game_count += len(ff.games)
-            """
     except exc.SteamFriendsException as e:
         raise self.retry(exc=e, countdown=90 * random.randint(1, 3))
 
