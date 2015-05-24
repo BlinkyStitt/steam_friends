@@ -59,13 +59,16 @@ class SteamApp(object):
     @ext.cache.memoize(3600)
     def app_details(self):
         # fetch any users not in the cache
-        r = requests.get(self.details_url.format(
+        details_url = self.details_url.format(
             appid=self.appid,
-        ))
+        )
+        r = requests.get(details_url)
 
-        log.debug("request: %s", r.text)
-
-        app_json = r.json()[str(self.appid)]
+        try:
+            app_json = r.json()[str(self.appid)]
+        except (TypeError, KeyError):
+            log.error("error processing %s: %s", details_url, r.text)
+            app_json = None
 
         if not app_json or 'success' not in app_json or not app_json['success']:
             # log something here?
@@ -220,7 +223,7 @@ class SteamUser(object):
                 g.append(SteamApp(**game_data))
         return g
 
-    def to_dict(self, with_friends=True, with_games=True):
+    def to_dict(self, with_friends=True, with_games=True, with_game_details=False):
         result = {
             'avatar': self.avatar,
             'avatarfull': self.avatarfull,
@@ -230,9 +233,10 @@ class SteamUser(object):
             'steamid': self.steamid,
         }
         if with_friends:
+            # don't include friends of friends or games of friends
             result['friends'] = [f.to_dict(with_friends=False, with_games=False) for f in self.friends]
         if with_games:
-            result['games'] = [g.to_dict() for g in self.games]
+            result['games'] = [g.to_dict(with_details=with_game_details) for g in self.games]
         return result
 
     @classmethod
@@ -278,7 +282,6 @@ class SteamUser(object):
         return users
 
     @classmethod
-    @ext.cache.memoize(3600)
     def id_from_openid(cls, claim_id):
         if not claim_id.startswith('http://steamcommunity.com/openid/id/'):
             raise ValueError("claim_id not from steamcommunity.com")
