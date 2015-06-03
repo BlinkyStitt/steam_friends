@@ -1,4 +1,3 @@
-import cassette
 import pytest
 
 from steam_friends import models
@@ -17,17 +16,17 @@ def test_bad_id_from_openid(flask_app):
             models.SteamUser.id_from_openid(fake_openid)
 
 
+@pytest.vcr.use_cassette()
 def test_id_to_id64(flask_app):
-    with cassette.play('data/test_steam_user_from_steamid64.yaml'):
-        with flask_app.test_request_context():
-            assert models.SteamUser.id_to_id64('nynjawitay') == '76561197980747796'
+    with flask_app.test_request_context():
+        assert models.SteamUser.id_to_id64('nynjawitay') == '76561197980747796'
 
 
+@pytest.vcr.use_cassette()
 def test_bad_id_to_id64(flask_app):
-    with cassette.play('data/test_steam_user_from_steamid64.yaml'):
-        with flask_app.test_request_context():
-            steamid64 = models.SteamUser.id_to_id64('nynjawitaynynjawitaynynjawitay')
-            assert steamid64 is None
+    with flask_app.test_request_context():
+        steamid64 = models.SteamUser.id_to_id64('nynjawitaynynjawitaynynjawitay')
+        assert steamid64 is None
 
 
 def test_steam_app(flask_app):
@@ -76,17 +75,17 @@ def test_steam_user_init():
     )
 
 
+@pytest.vcr.use_cassette()
 def test_steam_user_from_steamid64(flask_app):
-    with cassette.play('data/test_steam_user_from_steamid64.yaml'):
-        with flask_app.test_request_context():
-            steam_user = models.SteamUser.get_user('76561198060689354')
+    with flask_app.test_request_context():
+        steam_user = models.SteamUser.get_user('76561198060689354')
 
-            assert steam_user.personaname == 'ARizzo'
+        assert steam_user.personaname == 'ARizzo'
 
 
+@pytest.vcr.use_cassette()
 def test_failed_steam_user_from_steamid64(flask_app):
-    with cassette.play('data/test_failed_steam_user_from_steamid64.yaml'):
-        with flask_app.test_request_context():
-            steam_user = models.SteamUser.get_user('0000')
+    with flask_app.test_request_context():
+        steam_user = models.SteamUser.get_user('0000')
 
-            assert steam_user is None
+        assert steam_user is None

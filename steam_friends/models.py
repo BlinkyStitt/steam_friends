@@ -93,8 +93,6 @@ class SteamApp(object):
     # todo: cache result in flask.g
     @property
     def app_details(self):
-        # cache memoize doesn't work well for us here because we dont want to cache api failures
-
         if self.appid in self.skipped_appids:
             return
 
@@ -106,6 +104,7 @@ class SteamApp(object):
         else:
             try:
                 # eventhough this says "appids", it returns null when given multiple values
+                # this is an undocumented api endpoint used by steam big picture
                 r = requests.get("http://store.steampowered.com/api/appdetails/", params={
                     'appids': self.appid,
                 })
@@ -214,7 +213,7 @@ class SteamApp(object):
 class SteamUser(object):
 
     def __init__(self, steamid, queue_friends_of_friends=False, **kwargs):
-        self.steamid = steamid  # should this really be named steamid64
+        self.steamid = steamid  # this should probably be named steamid64 but then it wont match steam's api
 
         self.avatar = kwargs.pop('avatar', None)
         self.avatarmedium = kwargs.pop('avatarmedium', None)
@@ -270,7 +269,11 @@ class SteamUser(object):
             log.info("Found cached friends of %r: %s", self, f_ids)
         else:
             log.info("Fetching friends of %r", self)
-            r = steam_api.get_json("ISteamUser/GetFriendList", version=2)
+            r = steam_api.get_json(
+                "ISteamUser/GetFriendList",
+                version=2,
+                steamid=self.steamid,
+            )
 
             f_ids = []
             if r:
@@ -299,7 +302,12 @@ class SteamUser(object):
 
             log.info("Fetching games of %r", self)
             # this seem to be the onl place we can get the icon and logo hashes
-            games_json = steam_api.get_json("IPlayerService/GetOwnedGames")
+            games_json = steam_api.get_json(
+                "IPlayerService/GetOwnedGames",
+                include_appinfo=include_appinfo,
+                include_played_free_games=include_played_free_games,
+                steamid=self.steamid,
+            )
             if games_json and games_json['response']:
                 for game_data in games_json['response']['games']:
                     # todo: sometimes string, sometimes int...
@@ -387,23 +395,27 @@ class SteamUser(object):
         if steamid64s:
             # todo: split this into multiple queries if its a lot of ids?
             # fetch any users not in the cache
-            users_url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2'
-            try:
-                r = requests.get(users_url, params={
-                    'format': 'json',
-                    'steamids': steamid64s,
-                })
-            except requests.exceptions.ConnectionError as e:
-                log.error("%s", e)
-                # todo: flash message?
-            else:
-                for user_data in r.json()['response']['players']:
+
+            fetched_ids = []
+
+            r = steam_api.get_json(
+                "ISteamUser/GetPlayerSummaries",
+                version=2,
+                steamids=steamid64s,
+            )
+            if r:
+                for user_data in r['response']['players']:
                     u = cls(queue_friends_of_friends=queue_friends_of_friends, **user_data)
                     users.append(u)
+                    fetched_ids.append(u.steamid)
 
                     cache_key = cache_key_template.format(u.steamid)
                     ext.flask_redis.set(cache_key, msgpack.dumps(user_data), ex=DEFAULT_TTL)
-                log.debug("Fetched users from steam: %s", steamid64s)
+                log.debug("Fetched users from steam: %s", fetched_ids)
+
+                if fetched_ids != steamid64s:
+                    missed_ids = set(steamid64s) - set(fetched_ids)
+                    log.warning("Unable to query all user. Missed: %s", missed_ids)
 
         return users
 
@@ -421,18 +433,13 @@ class SteamUser(object):
         if not result:
             log.info("Fetching steam64id of %s", steamid)
 
-            vanity_url = 'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v1'
-            try:
-                r = requests.get(vanity_url, params={
-                    'format': 'json',
-                    'vanityurl': steamid,
-                })
-            except requests.exceptions.ConnectionError as e:
-                log.error("%s", e)
-                # todo: flash message?
-            else:
+            r = steam_api.get_json(
+                "ISteamUser/ResolveVanityURL",
+                vanityurl=steamid,
+            )
+            if r:
                 try:
-                    result = r.json()['response']['steamid']
+                    result = r['response']['steamid']
                 except (KeyError, TypeError):
                     result = None
                 else:
