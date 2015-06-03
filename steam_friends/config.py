@@ -7,19 +7,15 @@ log = logging.getLogger(__name__)
 
 
 class Config(object):
+    BROKER_URL = 'redis://localhost:10002/1'  # celery queue
     CELERYD_HIJACK_ROOT_LOGGER = False
-    CACHE_DEFAULT_TIMEOUT = 60 * 60
-    CACHE_REDIS_DB = 0
-    CACHE_REDIS_HOST = 'localhost'
-    CACHE_REDIS_PORT = '10002'
-    CACHE_TYPE = 'redis'
-    BROKER_URL = 'redis://localhost:10002/1'
     DEBUG = False
     LOGGER_NAME = 'flask'
     OPENID_FS_STORE_PATH = "/tmp/steam_friends/openid"
+    REDIS_URL = "redis://localhost:10002/0"  # caching
 
     # todo: remove this and revoke the key. but I'm lazy now
-    STEAMODD_API_KEY = "DA0509DA52BC706F282F2D315D3C61BB"
+    STEAM_API_KEY = "DA0509DA52BC706F282F2D315D3C61BB"
 
     TESTING = False
 
@@ -33,7 +29,6 @@ class DevelopmentConfig(Config):
 
 
 class ProductionConfig(Config):
-    CACHE_TYPE = 'redis'
     DEBUG = False
 
     # todo: remove this and revoke the key. but I'm lazy now

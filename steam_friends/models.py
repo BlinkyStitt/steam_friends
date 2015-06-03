@@ -2,24 +2,23 @@ from __future__ import absolute_import
 
 import functools
 import logging
+import msgpack
 import random
 
 import requests
-import steam.api
 
-from steam_friends import exc, ext
+from steam_friends import exc, ext, steam_api
 
 
 log = logging.getLogger(__name__)
+
+DEFAULT_TTL = 3600
 
 
 @functools.total_ordering
 class SteamApp(object):
 
     image_url = "http://media.steampowered.com/steamcommunity/public/images/apps/{appid}/{hash}.jpg"
-
-    # eventhough this says "appids", it returns null when given multiple values
-    details_url = "http://store.steampowered.com/api/appdetails/?appids={appid}"
 
     # these appids don't seem to have store pages but are still returned in games lists...
     # todo: figure out what all these actually are if they aren't games
@@ -49,17 +48,17 @@ class SteamApp(object):
         # this may have been given, or it may come from appdetails
         self.name = kwargs.pop('name', None)
 
-        # these are actually just hashes and not full urls
+        # these are actually just hashes and not full urls if they come from the steam api
         # setting them sets the cache. setting them to None queries the cache
-        self.img_logo_hash = kwargs.pop('img_logo_url', None)
-        self.img_icon_hash = kwargs.pop('img_icon_url', None)
+        self.img_logo_hash = kwargs.pop('img_logo_hash', kwargs.pop('img_logo_url', None))
+        self.img_icon_hash = kwargs.pop('img_icon_hash', kwargs.pop('img_icon_url', None))
 
         if queue_details:
             try:
                 # pre-emptively fill caches
                 # task_id = get_app_details.delay(self.steamid)  # this should work, but it misses our config :'(
                 task_id = ext.flask_celery.get_task('get_app_details').delay(self.appid)
-                log.debug("queued get_app_details: %s", task_id)
+                log.debug("queued get_app_details(%s): %s", self.appid, task_id)
             except Exception as e:
                 log.warning("Unable to queue get_app_details: %s", e)
 
@@ -100,27 +99,33 @@ class SteamApp(object):
             return
 
         cache_key = self.app_details_key
-        cached_app_details = ext.cache.cache.get(cache_key)
-        if not cached_app_details:
-
-            # fetch any users not in the cache
-            details_url = self.details_url.format(
-                appid=self.appid,
-            )
-            r = requests.get(details_url)
-
+        cached_app_details = ext.flask_redis.get(cache_key)
+        if cached_app_details:
+            cached_app_details = msgpack.loads(cached_app_details)
+            log.debug("Retrieved app_details for %r from cache", self)
+        else:
             try:
-                app_json = r.json()[str(self.appid)]
-            except (TypeError, KeyError):
-                app_json = None
+                # eventhough this says "appids", it returns null when given multiple values
+                r = requests.get("http://store.steampowered.com/api/appdetails/", params={
+                    'appids': self.appid,
+                })
+            except requests.exceptions.ConnectionError as e:
+                log.error("%s", e)
+                # todo: flash message?
+            else:
+                try:
+                    app_json = r.json()[str(self.appid)]
+                except (TypeError, KeyError):
+                    app_json = None
 
-            # sometimes we get back "null" sometimes "success == failed"
-            if not app_json or 'success' not in app_json or not app_json['success']:
-                log.warning("Failed querying %s: %s", details_url, r.text)
-                return
+                # sometimes we get back "null" sometimes "success == failed"
+                if not app_json or 'success' not in app_json or not app_json['success']:
+                    # todo: double check that r.url is a thing
+                    log.warning("Failed querying %s: %s", r.url, r.text)
+                    return
 
-            cached_app_details = app_json['data']
-            ext.cache.cache.set(cache_key, cached_app_details)
+                cached_app_details = app_json['data']
+                ext.flask_redis.set(cache_key, msgpack.dumps(cached_app_details), ex=DEFAULT_TTL)
 
         return cached_app_details
 
@@ -131,13 +136,13 @@ class SteamApp(object):
     @property
     def img_icon_hash(self):
         if self._img_icon_hash is None:
-            self._img_icon_hash = ext.cache.cache.get(self.img_icon_hash_key)
+            self._img_icon_hash = ext.flask_redis.get(self.img_icon_hash_key)
         return self._img_icon_hash
 
     @img_icon_hash.setter
     def img_icon_hash(self, value):
         if value is not None:
-            ext.cache.cache.set(self.img_icon_hash_key, value)
+            ext.flask_redis.set(self.img_icon_hash_key, value, ex=DEFAULT_TTL)
         self._img_icon_hash = value
 
     @property
@@ -156,13 +161,13 @@ class SteamApp(object):
     @property
     def img_logo_hash(self):
         if self._img_logo_hash is None:
-            self._img_logo_hash = ext.cache.cache.get(self.img_logo_hash_key)
+            self._img_logo_hash = ext.flask_redis.get(self.img_logo_hash_key)
         return self._img_logo_hash
 
     @img_logo_hash.setter
     def img_logo_hash(self, value):
         if value is not None:
-            ext.cache.cache.set(self.img_logo_hash_key, value)
+            ext.flask_redis.set(self.img_logo_hash_key, value, ex=DEFAULT_TTL)
         self._img_logo_hash = value
 
     @property
@@ -187,8 +192,11 @@ class SteamApp(object):
                 # todo: not sure about this
                 raise exc.SteamApiException("Could not find name for %r" % self)
 
-        # todo: how should we actually handle encoding?
-        self._name = value.encode('ascii', 'ignore')
+        # todo: this is a hack. how should we handle encoding?
+        if value == 'Batman\xe2\x84\xa2: Arkham Origins':
+            value = 'Batman: Arkham Origins'
+
+        self._name = value
 
     def to_dict(self, with_details=False):
         data = {
@@ -219,7 +227,7 @@ class SteamUser(object):
                 # pre-emptively fill caches
                 # task_id = get_friends_of_friends.delay(self.steamid)  # this should work, but it misses our config
                 task_id = ext.flask_celery.get_task('get_friends_of_friends').delay(self.steamid)
-                log.debug("queued get_friends_of_friends(%r): %s", self, task_id)
+                log.debug("queued get_friends_of_friends(%s): %s", self.steamid, task_id)
             except Exception as e:
                 # todo: wtf is going on here?! why is this using the normal config
                 log.exception("Unable to queue get_friends_of_friends: %s", e)
@@ -250,45 +258,70 @@ class SteamUser(object):
         )
 
     @property
-    @ext.cache.memoize()
-    def friends(self, queue_friends_of_friends=False, relationship='friend'):
-        # todo: this is a property, but it has kwargs...
-        f = []
+    def friends(self):
+        return self.get_friends()
 
-        # todo: only lookup friends that aren't in our cache
-        log.info("Fetching friends of %r", self)
-        friends_response = steam.api.interface('ISteamUser').GetFriendList(
-            steamid=self.steamid,
-            relationship=relationship,
-        )
-        try:
-            for friends_data in friends_response['friendslist']['friends']:
-                f.append(friends_data['steamid'])
-        except steam.api.HTTPError:
-            log.warning("Failed fetching friends of %r", self)
-        return self.get_users(f, queue_friends_of_friends=queue_friends_of_friends)
+    def get_friends(self, queue_friends_of_friends=False, relationship='friend'):
+        cache_key = repr(self) + ':get_friends'
+
+        f_ids = ext.flask_redis.get(cache_key)
+        if f_ids:
+            f_ids = msgpack.loads(f_ids)
+            log.info("Found cached friends of %r: %s", self, f_ids)
+        else:
+            log.info("Fetching friends of %r", self)
+            r = steam_api.get_json("ISteamUser/GetFriendList", version=2)
+
+            f_ids = []
+            if r:
+                for friends_data in r['friendslist']['friends']:
+                    f_ids.append(friends_data['steamid'])
+                log.debug("Found friends of %r: %s", self, f_ids)
+                ext.flask_redis.set(cache_key, msgpack.dumps(f_ids), ex=DEFAULT_TTL)
+            else:
+                log.warning("Failed fetching friends of %r", self)
+
+        return self.get_users(f_ids, queue_friends_of_friends=queue_friends_of_friends)
 
     @property
-    @ext.cache.memoize()
-    def games(self, include_appinfo=1, include_played_free_games=1, queue_details=1):
-        # todo: this is a property, but it has kwargs...
-        g = []
+    def games(self):
+        return self.get_games()
 
-        log.info("Fetching games of %r", self)
-        games_response = steam.api.interface('IPlayerService').GetOwnedGames(
-            steamid=self.steamid,
-            include_appinfo=include_appinfo,
-            include_played_free_games=include_played_free_games,
-        )
-        if games_response['response'] == {}:
-            log.warning("Failed fetching games of %r", self)
+    def get_games(self, include_appinfo=1, include_played_free_games=1, queue_details=0):
+        cache_key = "{!r}:get_games:{}:{}".format(self, include_appinfo, include_played_free_games)
+
+        # todo: just cache the game ids and let the icon hashes be cached elsewhere
+        game_datas = ext.flask_redis.get(cache_key)
+        if game_datas:
+            game_datas = msgpack.loads(game_datas)
         else:
-            for game_data in games_response['response']['games']:
-                # todo: sometimes string, sometimes int...
-                if str(game_data['appid']) in SteamApp.skipped_appids:
-                    continue
-                g.append(SteamApp(queue_details=queue_details, **game_data))
-        return g
+            game_datas = []
+
+            log.info("Fetching games of %r", self)
+            # this seem to be the onl place we can get the icon and logo hashes
+            games_json = steam_api.get_json("IPlayerService/GetOwnedGames")
+            if games_json and games_json['response']:
+                for game_data in games_json['response']['games']:
+                    # todo: sometimes string, sometimes int...
+                    if str(game_data['appid']) in SteamApp.skipped_appids:
+                        continue
+
+                    game_datas.append({
+                        'appid': game_data['appid'],
+                        'name': game_data['name'],
+                        'img_icon_hash': game_data['img_icon_url'],
+                        'img_logo_hash': game_data['img_logo_url'],
+                    })
+
+                ext.flask_redis.set(cache_key, msgpack.dumps(game_datas), ex=DEFAULT_TTL)
+            else:
+                log.warning("Failed fetching games of %r", self)
+
+        games = []
+        for game_data in game_datas:
+            games.append(SteamApp(queue_details=queue_details, **game_data))
+
+        return games
 
     def to_dict(self, with_friends=True, with_games=True, with_game_details=False):
         result = {
@@ -326,39 +359,51 @@ class SteamUser(object):
         if not steamid64s:
             return users
 
+        if isinstance(steamid64s, basestring):
+            raise ValueError
+
         cache_key_template = cls.__name__ + ':{}'
 
         # fetch any users in the cache
         cached_user_keys = [cache_key_template.format(i) for i in steamid64s]
-        cached_users = ext.cache.cache.get_dict(*cached_user_keys)
-        for cached_data in cached_users.itervalues():
-            if not cached_data:
-                # this shouldn't ever happen
+
+        cached_users = ext.flask_redis.mget(*cached_user_keys)
+        for user_data in cached_users:
+            if not user_data:
+                # user wasn't cached, we will query any cache misses with one query later
                 continue
+            user_data = msgpack.loads(user_data)
 
-            u = cls(**cached_data)
+            u = cls(queue_friends_of_friends=queue_friends_of_friends, **user_data)
 
-            steamid64s.remove(u.steamid)
             users.append(u)
-        log.debug("Retrieved from cache: %s", users)
+
+            # don't query this user later
+            # todo: i think this could be more efficient
+            steamid64s.remove(u.steamid)
+
+        log.debug("Retrieved users from cache: %s", users)
 
         if steamid64s:
+            # todo: split this into multiple queries if its a lot of ids?
             # fetch any users not in the cache
-            users_response = steam.api.interface('ISteamUser').GetPlayerSummaries(
-                steamids=steamid64s,
-                version=2,
-            )
-            for user_data in users_response['response']['players']:
-                if not user_data:
-                    # this shouldn't ever happen
-                    continue
-                u = cls(queue_friends_of_friends=queue_friends_of_friends, **user_data)
+            users_url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2'
+            try:
+                r = requests.get(users_url, params={
+                    'format': 'json',
+                    'steamids': steamid64s,
+                })
+            except requests.exceptions.ConnectionError as e:
+                log.error("%s", e)
+                # todo: flash message?
+            else:
+                for user_data in r.json()['response']['players']:
+                    u = cls(queue_friends_of_friends=queue_friends_of_friends, **user_data)
+                    users.append(u)
 
-                cache_key = cache_key_template.format(u.steamid)
-
-                ext.cache.cache.set(cache_key, user_data)  # never cache objects
-                users.append(u)
-            log.debug("Fetched from steam: %s", steamid64s)
+                    cache_key = cache_key_template.format(u.steamid)
+                    ext.flask_redis.set(cache_key, msgpack.dumps(user_data), ex=DEFAULT_TTL)
+                log.debug("Fetched users from steam: %s", steamid64s)
 
         return users
 
@@ -369,21 +414,39 @@ class SteamUser(object):
         return claim_id[len('http://steamcommunity.com/openid/id/'):]
 
     @classmethod
-    @ext.cache.memoize()
     def id_to_id64(cls, steamid):
-        # todo: cache this
-        log.info("Checking for steam64id of %s", steamid)
-        r = steam.api.interface('ISteamUser').ResolveVanityURL(vanityurl=steamid)
-        try:
-            return r['response']['steamid']
-        except (KeyError, steam.api.HTTPError):
-            return None
+        cache_key = cls.__name__ + ':id_to_id64:' + steamid
+
+        result = ext.flask_redis.get(cache_key)
+        if not result:
+            log.info("Fetching steam64id of %s", steamid)
+
+            vanity_url = 'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v1'
+            try:
+                r = requests.get(vanity_url, params={
+                    'format': 'json',
+                    'vanityurl': steamid,
+                })
+            except requests.exceptions.ConnectionError as e:
+                log.error("%s", e)
+                # todo: flash message?
+            else:
+                try:
+                    result = r.json()['response']['steamid']
+                except (KeyError, TypeError):
+                    result = None
+                else:
+                    ext.flask_redis.set(cache_key, result, ex=DEFAULT_TTL)
+
+        return result
 
 
 # this is an undocumented endpoint and seems to get rate limited a lot
 @ext.flask_celery.task(bind=True, rate='8/s')
 def get_app_details(self, appid):
     """Populate SteamApp.app_details cache."""
+    raise NotImplementedError
+
     game_count = 0
     try:
         sa = SteamApp(appid)
@@ -393,13 +456,15 @@ def get_app_details(self, appid):
     except exc.SteamFriendsException as e:
         raise self.retry(exc=e, countdown=90 * random.randint(1, 3))
 
-    log.info("Queued fetch of %d games", game_count)
+    log.info("Fetched app_details for %d games", game_count)
     return game_count
 
 
 @ext.flask_celery.task(bind=True, rate='50/s')
-def get_friends_of_friends(self, steamid64, with_games=False):
+def get_friends_of_friends(self, steamid64, with_games=False, queue_game_details=False):
     """Populate SteamUser cache."""
+    raise NotImplementedError
+
     friend_count = 0
     game_count = 0
     try:
@@ -407,15 +472,16 @@ def get_friends_of_friends(self, steamid64, with_games=False):
         for f in su.friends:
             friend_count += 1
             if with_games:
-                game_count += len(f.games)
+                # todo: with_game_details balloons out to WAY too many tasks
+                game_count += len(f.get_games(with_details=False, queue_details=queue_game_details))
 
             for ff in f.friends:
                 friend_count += 1
-                if False and with_games:
-                    # todo: this balloons out to WAY too many tasks
-                    game_count += len(ff.games)
+                if with_games:
+                    # todo: with_game_details balloons out to WAY too many tasks
+                    game_count += len(ff.get_games(with_details=False, queue_game_details=queue_game_details))
     except exc.SteamFriendsException as e:
         raise self.retry(exc=e, countdown=90 * random.randint(1, 3))
 
-    log.info("Queued fetch of %d friends and %d games", friend_count, game_count)
+    log.info("Fetched %d friends and %d games", friend_count, game_count)
     return friend_count, game_count

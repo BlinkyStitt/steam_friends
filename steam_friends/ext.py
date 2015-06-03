@@ -5,14 +5,10 @@ import celery.signals
 import flask
 import logging
 
-from flask.ext import cache, openid
+from flask.ext import openid, redis
 
 
 log = logging.getLogger(__name__)
-
-cache = cache.Cache()
-
-oid = openid.OpenID(safe_roots=[])
 
 
 class FlaskCelery(object):
@@ -134,10 +130,6 @@ class FlaskCelery(object):
 
 flask_celery = FlaskCelery()
 
+flask_redis = redis.FlaskRedis()
 
-"""
-@celery.signals.setup_logging.connect
-def celery_logging(*args, **kwargs):
-    # stop celery from hijacking the logger
-    pass
-"""
+oid = openid.OpenID(safe_roots=[])

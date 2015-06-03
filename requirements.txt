@@ -4,6 +4,6 @@ Flask
 Flask-Cache
 Flask-DebugToolbar
 flask-openid
+flask-redis
 msgpack-python
 requests
-steamodd

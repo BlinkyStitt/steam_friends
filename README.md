@@ -106,6 +106,6 @@ Todo
 * Show friends lists for all the queried users with check boxes to add the friends without having to type any names or look up any 64-bit ids
 * Only include actually installed games. I’m not sure this is possible
 * Filesize of the games
-* Caching
+* Handle Caching be unavailable
 * Rate-limiting
 * Better CSS than Bootstrap

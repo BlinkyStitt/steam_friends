@@ -5,15 +5,21 @@ import logging
 import os
 import sys
 
-from flask_debugtoolbar import DebugToolbarExtension
+from flask.ext import debugtoolbar
+import celery
 import flask
-import steam  # https://github.com/Lagg/steamodd
 
 from steam_friends import config, ext
 from steam_friends.views import api, auth, main
 
 
 log = logging.getLogger(__name__)
+
+
+@celery.signals.setup_logging.connect
+def celery_logging(*args, **kwargs):
+    # stop celery from hijacking the logger
+    pass
 
 
 def create_app(app_env=None):
@@ -46,11 +52,8 @@ def create_app(app_env=None):
 
             app.config[config_key] = value
 
-    # setup apis and extensions
-    steam.api.key.set(app.config['STEAMODD_API_KEY'])
-
     ext.flask_celery.init_app(app)
-    ext.cache.init_app(app)
+    ext.flask_redis.init_app(app)
     ext.oid.init_app(app)
 
     # attach our blueprints
@@ -66,7 +69,7 @@ def create_app(app_env=None):
 
     # dev only things go here
     if app.debug:
-        DebugToolbarExtension(app)
+        debugtoolbar.DebugToolbarExtension(app)
 
     # delete flask's default handlers. https://github.com/mitsuhiko/flask/issues/641
     # we configure our own logging when we want it
