@@ -59,8 +59,16 @@ Setup the python tests::
     pip install -r requirements-tests.txt
 
 Run the python tests::
+
     ./test.sh
 
+Recording new HTTP fixtures::
+
+    STEAM_FRIENDS_TEST_RECORD_HTTP=once ./test.sh
+
+Re-recording all HTTP fixtures::
+
+    STEAM_FRIENDS_TEST_RECORD_HTTP=all ./test.sh
 
 Production
 ----------

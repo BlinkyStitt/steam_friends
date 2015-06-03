@@ -24,13 +24,15 @@ def get_json(url, version=1, **params):
         )
     )
 
-    print "params:", params
-
     try:
         r = requests.get(url, params=params)
     except requests.exceptions.ConnectionError as e:
         log.error("%s", e)
         # todo: flash message?
         return None
-    else:
+
+    try:
         return r.json()
+    except ValueError:
+        log.warning("Bad JSON from %s with %s", url, params)
+        return None

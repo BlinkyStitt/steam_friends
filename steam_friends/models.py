@@ -195,7 +195,7 @@ class SteamApp(object):
         if value == 'Batman\xe2\x84\xa2: Arkham Origins':
             value = 'Batman: Arkham Origins'
 
-        self._name = value
+        self._name = value.encode('ascii', errors='ignore')
 
     def to_dict(self, with_details=False):
         data = {
@@ -271,7 +271,6 @@ class SteamUser(object):
             log.info("Fetching friends of %r", self)
             r = steam_api.get_json(
                 "ISteamUser/GetFriendList",
-                version=2,
                 steamid=self.steamid,
             )
 
@@ -316,7 +315,7 @@ class SteamUser(object):
 
                     game_datas.append({
                         'appid': game_data['appid'],
-                        'name': game_data['name'],
+                        'name': game_data['name'].encode('ascii', errors='ignore'),  # todo: support non-ascii
                         'img_icon_hash': game_data['img_icon_url'],
                         'img_logo_hash': game_data['img_logo_url'],
                     })
@@ -336,7 +335,7 @@ class SteamUser(object):
             'avatar': self.avatar,
             'avatarfull': self.avatarfull,
             'avatarmedium': self.avatarmedium,
-            'personaname': self.personaname,
+            'personaname': self.personaname.encode('ascii', errors='ignore'),  # todo: support non-ascii
             'personastate': self.personastate,
             'steamid': self.steamid,
         }

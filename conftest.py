@@ -6,15 +6,9 @@ import vcr
 from steam_friends import app
 
 
-if os.environ.get('STEAM_FRIENDS_TEST_RECORD_HTTP') == '1':
-    record_mode = 'all'
-else:
-    record_mode = 'none'
-
-
 my_vcr = vcr.VCR(
     cassette_library_dir='data/vcr',
-    record_mode=record_mode,
+    record_mode=os.environ.get('STEAM_FRIENDS_TEST_RECORD_HTTP', 'none'),
 )
 
 

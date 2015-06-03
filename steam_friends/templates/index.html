@@ -53,7 +53,7 @@
         {% set tr_class="" %}
       {% endif %}
       <tr class="{{ tr_class }}">
-        <td><img class="img-thumbnail pull-left" src="{{ g.img_icon_url }}" />{{ g }}</td>
+        <td><img class="img-thumbnail pull-left" src="{{ g.img_icon_url }}" />{{ g.name }}</td>
         <td>{{ c }}</td>
         {% for u in steam_users %}
           <td>
