@@ -1,6 +1,8 @@
 flake8 >=2, <3
 pytest >=2, <3
-pytest-cov >=1, <2
-pytest-xdist >=1, <2
+pytest-cache >=1, <2
 pytest-capturelog <1
+pytest-cov >=1, <2
+pytest-instafail <1
+pytest-xdist >=1, <2
 vcrpy >=1.5, <2
