@@ -205,7 +205,8 @@ class SteamApp(object):
         if not value and self.app_details:
             # todo: I've seen this fail inside celery tasks
             value = self.app_details['name']
-        else:
+
+        if not value:
             # todo: not sure about this
             raise exc.SteamApiException("Could not find name for %r" % self)
 
@@ -492,8 +493,6 @@ class SteamUser(object):
 @ext.flask_celery.task(bind=True, rate='8/s')
 def get_app_details(self, appid):
     """Populate SteamApp.app_details cache."""
-    return  # todo: re-enable this once it is fully tested
-
     game_count = 0
 
     sa = SteamApp(appid)
@@ -506,9 +505,9 @@ def get_app_details(self, appid):
 
 
 @ext.flask_celery.task(bind=True, rate='50/s')
-def get_friends_of_friends(self, steamid64, with_games=True, queue_game_details=True):
+def get_friends_of_friends(self, steamid64, with_games=False, queue_game_details=True):
     """Populate SteamUser cache."""
-    return  # todo: re-enable this once it is fully tested
+    # todo: enable with_games once we do more with them
 
     friend_count = 0
     game_count = 0
