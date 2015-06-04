@@ -493,8 +493,6 @@ class SteamUser(object):
 @ext.flask_celery.task(bind=True, rate='8/s')
 def get_app_details(self, appid):
     """Populate SteamApp.app_details cache."""
-    raise NotImplementedError
-
     game_count = 0
     try:
         sa = SteamApp(appid)
@@ -509,10 +507,8 @@ def get_app_details(self, appid):
 
 
 @ext.flask_celery.task(bind=True, rate='50/s')
-def get_friends_of_friends(self, steamid64, with_games=False, queue_game_details=False):
+def get_friends_of_friends(self, steamid64, with_games=True, queue_game_details=True):
     """Populate SteamUser cache."""
-    raise NotImplementedError
-
     friend_count = 0
     game_count = 0
     try:

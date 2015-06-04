@@ -2,7 +2,6 @@ import collections
 import logging
 
 import flask
-import steam
 
 from steam_friends import models
 
@@ -66,8 +65,8 @@ def index():
             ]
 
     try:
-        steam_users = models.SteamUser.get_users(steamid64s, queue_friends_of_friends=False)
-    except steam.api.APIError as e:
+        steam_users = models.SteamUser.get_users(steamid64s, queue_friends_of_friends=True)
+    except Exception as e:
         log.warning("Steam API Error for users: %s", e)
         flask.flash("Failed connecting to the steam API", "danger")
         steam_users = []

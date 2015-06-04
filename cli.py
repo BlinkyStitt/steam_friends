@@ -21,6 +21,7 @@ debug_log_format = (
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG, format=debug_log_format)
 logging.getLogger('celery').setLevel(logging.WARNING)
+logging.getLogger('requests').setLevel(logging.WARNING)
 logging.getLogger('werkzeug').setLevel(logging.WARNING)
 
 log = logging.getLogger(__name__)
