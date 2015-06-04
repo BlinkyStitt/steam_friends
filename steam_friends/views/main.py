@@ -80,14 +80,14 @@ def index():
             try:
                 for g in u.games:
                     game_counter[g] += 1
-            except steam.api.APIError as e:
+            except Exception as e:
                 log.warning("Error while querying for games of %s: %s", u, e)
                 flask.flash("Error while querying for games of {}".format(u.steamid), "danger")
                 continue
             try:
                 for f in u.friends:
                     friend_counter[f] += 1
-            except steam.api.APIError as e:
+            except Exception as e:
                 log.warning("Error while querying for friends of %s: %s", u, e)
                 flask.flash("Error while querying for friends of {}".format(u), "danger")
                 continue
