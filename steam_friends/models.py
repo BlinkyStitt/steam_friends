@@ -3,7 +3,6 @@ from __future__ import absolute_import
 import functools
 import logging
 import msgpack
-import random
 import string
 
 import flask
@@ -203,12 +202,12 @@ class SteamApp(object):
 
     @name.setter
     def name(self, value):
-        if value is None:
-            if self.app_details:
-                value = self.app_details['name']
-            else:
-                # todo: not sure about this
-                raise exc.SteamApiException("Could not find name for %r" % self)
+        if not value and self.app_details:
+            # todo: I've seen this fail inside celery tasks
+            value = self.app_details['name']
+        else:
+            # todo: not sure about this
+            raise exc.SteamApiException("Could not find name for %r" % self)
 
         self._name = ''.join(s for s in value if s in string.printable)  # todo: support non-ascii?
 
@@ -493,14 +492,14 @@ class SteamUser(object):
 @ext.flask_celery.task(bind=True, rate='8/s')
 def get_app_details(self, appid):
     """Populate SteamApp.app_details cache."""
+    return  # todo: re-enable this once it is fully tested
+
     game_count = 0
-    try:
-        sa = SteamApp(appid)
-        if not sa.app_details:
-            raise exc.SteamApiException("No app_details for %r" % sa)
-        game_count += 1
-    except exc.SteamFriendsException as e:
-        raise self.retry(exc=e, countdown=90 * random.randint(1, 3))
+
+    sa = SteamApp(appid)
+    if not sa.app_details:
+        raise exc.SteamApiException("No app_details for %r" % sa)
+    game_count += 1
 
     log.info("Fetched app_details for %d games", game_count)
     return game_count
@@ -509,23 +508,25 @@ def get_app_details(self, appid):
 @ext.flask_celery.task(bind=True, rate='50/s')
 def get_friends_of_friends(self, steamid64, with_games=True, queue_game_details=True):
     """Populate SteamUser cache."""
+    return  # todo: re-enable this once it is fully tested
+
     friend_count = 0
     game_count = 0
-    try:
-        su = SteamUser(steamid64, queue_friends_of_friends=False)
-        for f in su.friends:
+
+    su = SteamUser(steamid64, queue_friends_of_friends=False)
+    for f in su.friends:
+        friend_count += 1
+        if with_games:
+            # todo: with_game_details balloons out to WAY too many tasks
+            games = f.get_games(queue_details=queue_game_details)
+            game_count += len(games)
+
+        for ff in f.friends:
             friend_count += 1
             if with_games:
                 # todo: with_game_details balloons out to WAY too many tasks
-                game_count += len(f.get_games(with_details=False, queue_details=queue_game_details))
-
-            for ff in f.friends:
-                friend_count += 1
-                if with_games:
-                    # todo: with_game_details balloons out to WAY too many tasks
-                    game_count += len(ff.get_games(with_details=False, queue_game_details=queue_game_details))
-    except exc.SteamFriendsException as e:
-        raise self.retry(exc=e, countdown=90 * random.randint(1, 3))
+                games = ff.get_games(queue_details=queue_game_details)
+                game_count += len(games)
 
     log.info("Fetched %d friends and %d games", friend_count, game_count)
     return friend_count, game_count
