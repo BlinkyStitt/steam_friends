@@ -23,7 +23,7 @@ interactions:
     headers:
       content-length: ['888']
       content-type: [application/json; charset=UTF-8]
-      date: ['Wed, 03 Jun 2015 03:47:39 GMT']
-      expires: ['Wed, 03 Jun 2015 03:47:39 GMT']
+      date: ['Thu, 04 Jun 2015 02:49:02 GMT']
+      expires: ['Thu, 04 Jun 2015 02:49:02 GMT']
     status: {code: 200, message: OK}
 version: 1

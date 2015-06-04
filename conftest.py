@@ -1,5 +1,7 @@
+import logging
 import os
 
+import mockredis
 import pytest
 import vcr
 
@@ -12,6 +14,11 @@ my_vcr = vcr.VCR(
 )
 
 
+@pytest.fixture(autouse=True)
+def configure_logs(caplog):
+    caplog.setLevel(logging.CRITICAL, logger='vcr.matchers')
+
+
 @pytest.fixture
 def flask_app():
     a = app.create_app(app_env='test')
@@ -22,6 +29,16 @@ def flask_app():
 @pytest.fixture
 def flask_app_client(flask_app):
     return flask_app.test_client()
+
+
+@pytest.fixture(autouse=True)
+def mock_redis(monkeypatch):
+    # todo: mockredis upstream does not mock from_url :( submit a patch
+    mockredis.mock_redis_client.from_url = lambda *args, **kwargs: mockredis.mock_redis_client()
+    mockredis.mock_strict_redis_client.from_url = lambda *args, **kwargs: mockredis.mock_strict_redis_client()
+
+    monkeypatch.setattr('redis.Redis', mockredis.mock_redis_client)
+    monkeypatch.setattr('redis.StrictRedis', mockredis.mock_strict_redis_client)
 
 
 def pytest_namespace():

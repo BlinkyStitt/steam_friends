@@ -4,6 +4,7 @@ import functools
 import logging
 import msgpack
 import random
+import string
 
 import requests
 
@@ -191,11 +192,9 @@ class SteamApp(object):
                 # todo: not sure about this
                 raise exc.SteamApiException("Could not find name for %r" % self)
 
-        # todo: this is a hack. how should we handle encoding?
-        if value == 'Batman\xe2\x84\xa2: Arkham Origins':
-            value = 'Batman: Arkham Origins'
-
-        self._name = value.encode('ascii', errors='ignore')
+        self._name = ''.join(s for s in value if s in string.printable)
+        # self._name = value.encode('ascii', errors='ignore')  # todo: support non-ascii?
+        # self._name = value.encode('ascii', errors='xmlcharrefreplace')  # todo: support non-ascii?
 
     def to_dict(self, with_details=False):
         data = {
@@ -218,7 +217,10 @@ class SteamUser(object):
         self.avatar = kwargs.pop('avatar', None)
         self.avatarmedium = kwargs.pop('avatarmedium', None)
         self.avatarfull = kwargs.pop('avatarfull', None)
-        self.personaname = kwargs.pop('personaname', '').encode('ascii', 'ignore')  # todo: improve this
+
+        personaname = kwargs.pop('personaname', '')
+        self.personaname = ''.join(s for s in personaname if s in string.printable)  # todo: improve this
+
         self.personastate = kwargs.pop('personastate', None)
 
         if queue_friends_of_friends:
@@ -315,7 +317,7 @@ class SteamUser(object):
 
                     game_datas.append({
                         'appid': game_data['appid'],
-                        'name': game_data['name'].encode('ascii', errors='ignore'),  # todo: support non-ascii
+                        'name': ''.join(s for s in game_data['name'] if s in string.printable),  # todo: support non-ascii?
                         'img_icon_hash': game_data['img_icon_url'],
                         'img_logo_hash': game_data['img_logo_url'],
                     })
@@ -335,7 +337,7 @@ class SteamUser(object):
             'avatar': self.avatar,
             'avatarfull': self.avatarfull,
             'avatarmedium': self.avatarmedium,
-            'personaname': self.personaname.encode('ascii', errors='ignore'),  # todo: support non-ascii
+            'personaname': self.personaname,
             'personastate': self.personastate,
             'steamid': self.steamid,
         }
@@ -375,19 +377,26 @@ class SteamUser(object):
         cached_user_keys = [cache_key_template.format(i) for i in steamid64s]
 
         cached_users = ext.flask_redis.mget(*cached_user_keys)
+        # todo: izip didn't work for us...
+        # for steamid, user_data in itertools.izip(steamid64s, cached_users):
         for user_data in cached_users:
             if not user_data:
                 # user wasn't cached, we will query any cache misses with one query later
                 continue
             user_data = msgpack.loads(user_data)
 
-            u = cls(queue_friends_of_friends=queue_friends_of_friends, **user_data)
+            if user_data:
+                if 'error' in user_data and user_data['error']:
+                    # we cached a missing user. dont query them again until data expires
+                    steamid64s.remove(user_data['steamid'])
+                else:
+                    # we cached good user data
+                    u = cls(queue_friends_of_friends=queue_friends_of_friends, **user_data)
 
-            users.append(u)
+                    users.append(u)
 
-            # don't query this user later
-            # todo: i think this could be more efficient
-            steamid64s.remove(u.steamid)
+                    # don't query this user later (even if we cached empty data for them)
+                    steamid64s.remove(u.steamid)
 
         log.debug("Retrieved users from cache: %s", users)
 
@@ -403,18 +412,33 @@ class SteamUser(object):
                 steamids=steamid64s,
             )
             if r:
+                p = ext.flask_redis.pipeline()
                 for user_data in r['response']['players']:
                     u = cls(queue_friends_of_friends=queue_friends_of_friends, **user_data)
                     users.append(u)
-                    fetched_ids.append(u.steamid)
+                    fetched_ids.append(str(u.steamid))  # this is getting annoying
 
                     cache_key = cache_key_template.format(u.steamid)
-                    ext.flask_redis.set(cache_key, msgpack.dumps(user_data), ex=DEFAULT_TTL)
+                    p.set(cache_key, msgpack.dumps(user_data), ex=DEFAULT_TTL)
+
                 log.debug("Fetched users from steam: %s", fetched_ids)
 
+                """
                 if fetched_ids != steamid64s:
                     missed_ids = set(steamid64s) - set(fetched_ids)
-                    log.warning("Unable to query all user. Missed: %s", missed_ids)
+                    log.warning("Unable to query all users. Missed: %s", missed_ids)
+                    for steamid in missed_ids:
+                        cache_key = cache_key_template.format(steamid)
+                        p.set(
+                            cache_key,
+                            msgpack.dumps({
+                                'steamid': steamid,
+                                'error': True,
+                            }),
+                            ex=DEFAULT_TTL,
+                        )
+                """
+                p.execute()
 
         return users
 

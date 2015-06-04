@@ -16,6 +16,9 @@ def get_json(url, version=1, **params):
         'key': flask.current_app.config.get('STEAM_API_KEY'),
     })
 
+    if 'steamids' in params and not isinstance(params['steamids'], basestring):
+        params['steamids'] = ','.join(params['steamids'])
+
     url = urlparse.urljoin(
         'http://api.steampowered.com/',
         '{url}/v{version}'.format(
@@ -23,6 +26,8 @@ def get_json(url, version=1, **params):
             version=version,
         )
     )
+
+    log.info("Querying Steam API: %s with %s", url, params)
 
     try:
         r = requests.get(url, params=params)
