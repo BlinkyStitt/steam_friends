@@ -6,6 +6,7 @@ import msgpack
 import random
 import string
 
+import flask
 import requests
 
 from steam_friends import exc, ext, steam_api
@@ -14,6 +15,24 @@ from steam_friends import exc, ext, steam_api
 log = logging.getLogger(__name__)
 
 DEFAULT_TTL = 3600
+
+
+def cached_property(func):
+    """Cache results of the func in the request global"""
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        if hasattr(flask.g, 'cached_property'):
+            cache = flask.g.cached_property
+        else:
+            cache = flask.g.cached_property = {}
+
+        # todo: do this fast and make sure we properly order dicts
+        key = func.__name__ + str(args) + str(kwargs)
+        if key not in cache:
+            cache[key] = func(*args, **kwargs)
+
+        return cache[key]
+    return inner
 
 
 @functools.total_ordering
@@ -91,8 +110,7 @@ class SteamApp(object):
     def app_details_key(self):
         return "{!r}:app_details".format(self, self.appid)
 
-    # todo: cache result in flask.g
-    @property
+    @cached_property
     def app_details(self):
         if self.appid in self.skipped_appids:
             return
@@ -192,9 +210,7 @@ class SteamApp(object):
                 # todo: not sure about this
                 raise exc.SteamApiException("Could not find name for %r" % self)
 
-        self._name = ''.join(s for s in value if s in string.printable)
-        # self._name = value.encode('ascii', errors='ignore')  # todo: support non-ascii?
-        # self._name = value.encode('ascii', errors='xmlcharrefreplace')  # todo: support non-ascii?
+        self._name = ''.join(s for s in value if s in string.printable)  # todo: support non-ascii?
 
     def to_dict(self, with_details=False):
         data = {
@@ -219,7 +235,7 @@ class SteamUser(object):
         self.avatarfull = kwargs.pop('avatarfull', None)
 
         personaname = kwargs.pop('personaname', '')
-        self.personaname = ''.join(s for s in personaname if s in string.printable)  # todo: improve this
+        self.personaname = ''.join(s for s in personaname if s in string.printable)  # todo: support non-ascii?
 
         self.personastate = kwargs.pop('personastate', None)
 
@@ -262,6 +278,7 @@ class SteamUser(object):
     def friends(self):
         return self.get_friends()
 
+    @cached_property
     def get_friends(self, queue_friends_of_friends=False, relationship='friend'):
         cache_key = repr(self) + ':get_friends'
 
@@ -291,6 +308,7 @@ class SteamUser(object):
     def games(self):
         return self.get_games()
 
+    @cached_property
     def get_games(self, include_appinfo=1, include_played_free_games=1, queue_details=0):
         cache_key = "{!r}:get_games:{}:{}".format(self, include_appinfo, include_played_free_games)
 
