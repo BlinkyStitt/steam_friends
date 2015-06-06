@@ -2,7 +2,6 @@ from __future__ import absolute_import
 
 import collections
 import functools
-import itertools
 import logging
 import msgpack
 import string
@@ -25,7 +24,7 @@ def freeze(o):
     elif isinstance(o, dict):
         return freeze(sorted(o.iteritems()))
     elif isinstance(o, collections.Iterable):
-        return repr(itertools.imap(freeze, o))
+        return msgpack.dumps([freeze(oo) for oo in o])
     else:
         return repr(o)
 
