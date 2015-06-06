@@ -2,7 +2,6 @@ import collections
 import logging
 
 import flask
-import steam
 
 from steam_friends import models
 
@@ -64,11 +63,10 @@ def index():
                 '76561197969428769',  # Son of Themis
                 # '76561197979664690',  # JC
             ]
-    log.info("checking users: %r", steamid64s)
 
     try:
-        steam_users = models.SteamUser.get_users(steamid64s)
-    except steam.api.APIError as e:
+        steam_users = models.SteamUser.get_users(steamid64s, queue_friends_of_friends=True)
+    except Exception as e:
         log.warning("Steam API Error for users: %s", e)
         flask.flash("Failed connecting to the steam API", "danger")
         steam_users = []
@@ -82,19 +80,20 @@ def index():
             try:
                 for g in u.games:
                     game_counter[g] += 1
-            except steam.api.APIError as e:
-                log.warning("Error while querying for games of %s: %s", u, e)
+            except Exception as e:
+                log.exception("Error while querying for games of %s: %s", u, e)
                 flask.flash("Error while querying for games of {}".format(u.steamid), "danger")
                 continue
             try:
                 for f in u.friends:
                     friend_counter[f] += 1
-            except steam.api.APIError as e:
-                log.warning("Error while querying for friends of %s: %s", u, e)
+            except Exception as e:
+                log.exception("Error while querying for friends of %s: %s", u, e)
                 flask.flash("Error while querying for friends of {}".format(u), "danger")
                 continue
 
     steam_users.sort()
+    log.info("steam users: %s", steam_users)
 
     return flask.render_template(
         'index.html',
@@ -103,3 +102,10 @@ def index():
         passed_ids=passed_ids,
         steam_users=steam_users,
     )
+
+
+def internal_error(e):
+    error_message = "Caught unhandled exception: {}".format(e)
+    # flask does this logging in handle_user_exception
+    # log.exception(error_message)
+    return flask.render_template('500.html', error_message=error_message), 500

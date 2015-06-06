@@ -1,9 +1,23 @@
+from __future__ import absolute_import
+
+import logging
+import sys
+
 from steam_friends import app
 
+
+# a simple single line format suitable for production
+log_format = '%(asctime)s - %(levelname)s - %(name)s: %(message)s'
+
+# configure logging before we do anything
+logging.basicConfig(stream=sys.stderr, level=logging.INFO, format=log_format)
+logging.getLogger('werkzeug').setLevel(logging.WARNING)
+
+# uwsgi expects "application" by default
 application = app.create_app(app_env='prod')
 
-# just to be safe
+# assert some things just to be safe
 assert application.debug is False
 assert application.testing is False
 
-application.config['LOGGING_CONFIG_FUNC']()
+application.logger.info("Starting %s for production", application)

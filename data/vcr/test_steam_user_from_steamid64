@@ -1,0 +1,29 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.7.0 CPython/2.7.9 Darwin/14.3.0]
+    method: GET
+    uri: http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2?steamids=76561198060689354&key=DA0509DA52BC706F282F2D315D3C61BB&format=json
+  response:
+    body: {string: !!python/unicode "{\n\t\"response\": {\n\t\t\"players\": [\n\t\t\
+        \t{\n\t\t\t\t\"steamid\": \"76561198060689354\",\n\t\t\t\t\"communityvisibilitystate\"\
+        : 3,\n\t\t\t\t\"profilestate\": 1,\n\t\t\t\t\"personaname\": \"ARizzo\",\n\
+        \t\t\t\t\"lastlogoff\": 1433214204,\n\t\t\t\t\"profileurl\": \"http://steamcommunity.com/id/ARizzo/\"\
+        ,\n\t\t\t\t\"avatar\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/2f/2f1d0e0838170da310548a8f01a94d0c256b8a08.jpg\"\
+        ,\n\t\t\t\t\"avatarmedium\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/2f/2f1d0e0838170da310548a8f01a94d0c256b8a08_medium.jpg\"\
+        ,\n\t\t\t\t\"avatarfull\": \"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/2f/2f1d0e0838170da310548a8f01a94d0c256b8a08_full.jpg\"\
+        ,\n\t\t\t\t\"personastate\": 0,\n\t\t\t\t\"primaryclanid\": \"103582791432588642\"\
+        ,\n\t\t\t\t\"timecreated\": 1332383733,\n\t\t\t\t\"personastateflags\": 0,\n\
+        \t\t\t\t\"loccountrycode\": \"US\",\n\t\t\t\t\"locstatecode\": \"CA\",\n\t\
+        \t\t\t\"loccityid\": 511\n\t\t\t}\n\t\t]\n\t\t\n\t}\n}"}
+    headers:
+      content-length: ['888']
+      content-type: [application/json; charset=UTF-8]
+      date: ['Thu, 04 Jun 2015 02:49:02 GMT']
+      expires: ['Thu, 04 Jun 2015 02:49:02 GMT']
+    status: {code: 200, message: OK}
+version: 1

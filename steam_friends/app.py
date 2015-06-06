@@ -1,12 +1,13 @@
+from __future__ import absolute_import
 from __future__ import print_function
 
 import logging
 import os
 import sys
 
-from flask_debugtoolbar import DebugToolbarExtension
+from flask.ext import debugtoolbar
+import celery
 import flask
-import steam  # https://github.com/Lagg/steamodd
 
 from steam_friends import config, ext
 from steam_friends.views import api, auth, main
@@ -15,11 +16,10 @@ from steam_friends.views import api, auth, main
 log = logging.getLogger(__name__)
 
 
-def internal_error(e):
-    error_message = "Caught unhandled exception: {}".format(e)
-    # flask does this logging in handle_user_exception
-    # log.exception(error_message)
-    return flask.render_template('500.html', error_message=error_message), 500
+@celery.signals.setup_logging.connect
+def celery_logging(*args, **kwargs):
+    # stop celery from hijacking the logger
+    pass
 
 
 def create_app(app_env=None):
@@ -52,9 +52,8 @@ def create_app(app_env=None):
 
             app.config[config_key] = value
 
-    # setup apis and extensions
-    steam.api.key.set(app.config['STEAMODD_API_KEY'])
-    ext.cache.init_app(app)
+    ext.flask_celery.init_app(app)
+    ext.flask_redis.init_app(app)
     ext.oid.init_app(app)
 
     # attach our blueprints
@@ -66,10 +65,14 @@ def create_app(app_env=None):
 
     # setup application wide error handlers
     # other error handlers should be attached to their respective blueprints
-    app.error_handler_spec[None][500] = internal_error
+    app.error_handler_spec[None][500] = main.internal_error
 
     # dev only things go here
     if app.debug:
-        DebugToolbarExtension(app)
+        debugtoolbar.DebugToolbarExtension(app)
+
+    # delete flask's default handlers. https://github.com/mitsuhiko/flask/issues/641
+    # we configure our own logging when we want it
+    del app.logger.handlers[:]
 
     return app

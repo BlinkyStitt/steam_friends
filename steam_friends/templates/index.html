@@ -53,7 +53,7 @@
         {% set tr_class="" %}
       {% endif %}
       <tr class="{{ tr_class }}">
-        <td><img class="img-thumbnail pull-left" src="{{ g.img_icon_url }}" />{{ g }}</td>
+        <td><img class="img-thumbnail pull-left" src="{{ g.img_icon_url }}" />{{ g.name }}</td>
         <td>{{ c }}</td>
         {% for u in steam_users %}
           <td>
@@ -100,7 +100,7 @@
       <tr class="{{ tr_class }}">
         <td>
           <img alt="{{ f.steamid }}" class="img-thumbnail pull-left" src="{{ f.avatar }}" />
-          {{ f }}
+          {{ f.personaname }} ({{ f.steamid }})
         </td>
         <td>{{ c }}</td>
         {% for u in steam_users %}
