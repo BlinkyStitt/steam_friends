@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+import collections
 import functools
 import logging
 import msgpack
@@ -16,22 +17,35 @@ log = logging.getLogger(__name__)
 DEFAULT_TTL = 3600
 
 
-def cached_property(func):
+def freeze(o):
+    # todo: make sure this works right and is fast
+    if isinstance(o, basestring):
+        return o
+    elif isinstance(o, dict):
+        return repr([freeze((ok, ov) for ok, ov in sorted(o.iteritems()))])
+    elif isinstance(o, collections.Iterable):
+        return repr([freeze(oo) for oo in o])
+    else:
+        return repr(o)
+
+
+def memoize_per_request(func):
     """Cache results of the func in the request global"""
     @functools.wraps(func)
-    def inner(*args, **kwargs):
-        if hasattr(flask.g, 'cached_property'):
-            cache = flask.g.cached_property
+    def memoized(*args, **kwargs):
+        # todo: is there somewhere else we could make sure this is setup?
+        if hasattr(flask.g, 'memoized'):
+            cache = flask.g.memoized
         else:
-            cache = flask.g.cached_property = {}
+            cache = flask.g.memoized = {}
 
         # todo: do this fast and make sure we properly order dicts
-        key = func.__name__ + str(args) + str(kwargs)
+        key = func.__name__ + freeze(args) + freeze(kwargs)
         if key not in cache:
             cache[key] = func(*args, **kwargs)
 
         return cache[key]
-    return inner
+    return memoized
 
 
 @functools.total_ordering
@@ -109,7 +123,7 @@ class SteamApp(object):
     def app_details_key(self):
         return "{!r}:app_details".format(self, self.appid)
 
-    @cached_property
+    @memoize_per_request
     def app_details(self):
         if self.appid in self.skipped_appids:
             return
@@ -278,7 +292,7 @@ class SteamUser(object):
     def friends(self):
         return self.get_friends()
 
-    @cached_property
+    @memoize_per_request
     def get_friends(self, queue_friends_of_friends=False, relationship='friend'):
         cache_key = repr(self) + ':get_friends'
 
@@ -308,7 +322,7 @@ class SteamUser(object):
     def games(self):
         return self.get_games()
 
-    @cached_property
+    @memoize_per_request
     def get_games(self, include_appinfo=1, include_played_free_games=1, queue_details=0):
         cache_key = "{!r}:get_games:{}:{}".format(self, include_appinfo, include_played_free_games)
 
@@ -327,7 +341,7 @@ class SteamUser(object):
                 include_played_free_games=include_played_free_games,
                 steamid=self.steamid,
             )
-            if games_json and games_json['response']:
+            if games_json and 'response' in games_json and 'games' in games_json['response']:
                 for game_data in games_json['response']['games']:
                     # todo: sometimes string, sometimes int...
                     if str(game_data['appid']) in SteamApp.skipped_appids:
@@ -342,7 +356,7 @@ class SteamUser(object):
 
                 ext.flask_redis.set(cache_key, msgpack.dumps(game_datas), ex=DEFAULT_TTL)
             else:
-                log.warning("Failed fetching games of %r", self)
+                log.warning("Bad response fetching games for %r: %s", self, games_json)
 
         games = []
         for game_data in game_datas:

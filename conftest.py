@@ -31,6 +31,7 @@ def flask_app_client(flask_app):
     return flask_app.test_client()
 
 
+"""
 @pytest.fixture(autouse=True)
 def mock_redis(monkeypatch):
     # todo: mockredis upstream does not mock from_url :( submit a patch
@@ -39,7 +40,7 @@ def mock_redis(monkeypatch):
 
     monkeypatch.setattr('redis.Redis', mockredis.mock_redis_client)
     monkeypatch.setattr('redis.StrictRedis', mockredis.mock_strict_redis_client)
-
+"""
 
 def pytest_namespace():
     return {

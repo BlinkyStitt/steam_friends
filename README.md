@@ -10,6 +10,7 @@ Initial Setup::
     brew install redis
     virtualenv env
     . env/bin/activate
+    pip install --upgrade pip
     pip install -r requirements-dev.txt
     export PATH=$(pwd)/static/node_modules/.bin:$PATH
     cd static
