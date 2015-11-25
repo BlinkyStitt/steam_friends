@@ -299,6 +299,7 @@ class SteamUser(object):
         f_ids = ext.flask_redis.get(cache_key)
         if f_ids:
             f_ids = msgpack.loads(f_ids)
+            # todo: this seems always empty
             log.info("Found cached friends of %r: %s", self, f_ids)
         else:
             log.info("Fetching friends of %r", self)
@@ -312,6 +313,7 @@ class SteamUser(object):
                 for friends_data in r['friendslist']['friends']:
                     f_ids.append(friends_data['steamid'])
                 log.debug("Found friends of %r: %s", self, f_ids)
+                # todo: this seems tonot work
                 ext.flask_redis.set(cache_key, msgpack.dumps(f_ids), ex=DEFAULT_TTL)
             else:
                 log.warning("Failed fetching friends of %r", self)
