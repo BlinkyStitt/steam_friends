@@ -1,0 +1,31 @@
+.login-button {
+	padding: 1em 1.5em 1em 1.5em;
+	color: white;
+	text-decoration: none;
+	background-color: black;
+	border-radius: 5px;
+	&:hover {
+		opacity: 80%;
+		font-weight: 600;
+	}
+}
+a.add-friends {
+	padding: 1em 1.5em 1em 1.5em;
+	color: white;
+	text-decoration: none;
+	background-color: black;
+	border-radius: 5px;
+	&:hover {
+		opacity: 80%;
+		font-weight: 600;
+	}
+}
+.login-title {
+	padding-top: 4em;
+	padding-bottom: 1em;
+}
+.steam-title {
+	padding-bottom: 1em;
+	padding-top: 1.5em;
+}
+
