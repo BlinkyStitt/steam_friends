@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# check the code for lint and run the tests
 
 ./env/bin/flake8
 LINT_EXIT_CODE=$?

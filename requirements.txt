@@ -1,3 +1,4 @@
+# todo: http://nvie.com/posts/better-package-management/
 click
 celery
 Flask

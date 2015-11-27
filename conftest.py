@@ -10,7 +10,7 @@ from steam_friends import app
 
 my_vcr = vcr.VCR(
     cassette_library_dir='data/vcr',
-    record_mode=os.environ.get('STEAM_FRIENDS_TEST_RECORD_HTTP', 'none'),
+    record_mode=os.environ.get('SF_TEST_RECORD_HTTP', 'none'),
 )
 
 

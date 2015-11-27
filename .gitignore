@@ -1,6 +1,10 @@
+!env.all
+!env.example
+*.pyc
 .cache
 .coverage
 .coverage.*
-*.pyc
+env.*
 env/
 htmlcov/
+npm-debug.log

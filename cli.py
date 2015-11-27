@@ -10,20 +10,6 @@ import click
 from steam_friends import app
 
 
-# similar to flask.app.Flask.debug_log_format
-debug_log_format = (
-    '-' * 80 + '\n' +
-    '%(levelname)s in %(name)s [%(pathname)s:%(lineno)d]:\n' +
-    '%(message)s\n' +
-    '-' * 80
-)
-
-
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG, format=debug_log_format)
-logging.getLogger('celery').setLevel(logging.WARNING)
-logging.getLogger('requests').setLevel(logging.WARNING)
-logging.getLogger('werkzeug').setLevel(logging.WARNING)
-
 log = logging.getLogger(__name__)
 
 
@@ -32,6 +18,19 @@ log = logging.getLogger(__name__)
 @click.pass_context
 def cli(ctx, env):
     """Manage steam_friends."""
+    # similar to flask.app.Flask.debug_log_format
+    debug_log_format = (
+        '-' * 80 + '\n' +
+        '%(levelname)s in %(name)s [%(pathname)s:%(lineno)d]:\n' +
+        '%(message)s\n' +
+        '-' * 80
+    )
+
+    logging.basicConfig(stream=sys.stderr, level=logging.DEBUG, format=debug_log_format)
+    logging.getLogger('celery').setLevel(logging.WARNING)
+    logging.getLogger('requests').setLevel(logging.WARNING)
+    logging.getLogger('werkzeug').setLevel(logging.WARNING)
+
     ctx.obj = app.create_app(app_env=env)
 
 
@@ -64,4 +63,4 @@ def http(obj, host, port):
 
 
 if __name__ == '__main__':
-    cli(auto_envvar_prefix='STEAM_FRIENDS')
+    cli(auto_envvar_prefix='SF')

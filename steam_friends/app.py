@@ -27,22 +27,23 @@ def create_app(app_env=None):
 
     # load main configs
     try:
-        app_env = app_env or os.environ['STEAM_FRIENDS_ENV']
+        app_env = app_env or os.environ['SF_ENV']
         app_config = config.configs[app_env]
     except KeyError:
         # print because logging can't be setup yet
-        print("ERROR: You must `export STEAM_FRIENDS_ENV` to one of: {}".format(', '.join(config.configs.iterkeys())), file=sys.stderr)
+        print("ERROR: You must `export SF_ENV` to one of: {}".format(', '.join(config.configs.iterkeys())), file=sys.stderr)
         sys.exit(1)
     app.config.from_object(app_config)
 
     # allow loading additional configuration
     # secret things like passwords and API keys are loaded here
-    app.config.from_envvar('STEAM_FRIENDS_CONFIG', silent=True)
+    app.config.from_envvar('SF_CONFIG', silent=True)
 
     # anything can also come from env vars
+    # SECRETS can only come from environment variables
     for key, value in os.environ.iteritems():
-        if key.startswith('STEAM_FRIENDS_'):
-            config_key = key[len('STEAM_FRIENDS_'):]
+        if key.startswith('SF_'):
+            config_key = key[len('SF_'):]
 
             # I don't love this...
             if value == 'True':
@@ -51,6 +52,11 @@ def create_app(app_env=None):
                 value = False
 
             app.config[config_key] = value
+
+    # all secrets should have been replaced with real values. check for any missed ones
+    for key, value in app.config.iteritems():
+        if key == config.SECRET:
+            raise ValueError("SF_{} not set!" % key)
 
     ext.flask_celery.init_app(app)
     ext.flask_redis.init_app(app)

@@ -1,47 +1,63 @@
 steam_friends
 =============
 
+This application was quickly written to find common steam games between friends. There are a lot of ideas on how to make this better, but it currently just does the basics.
+
 
 Developing
 ----------
 
-Initial Setup::
+Install requirements:
 
-    brew install redis
+ * redis: `brew install redis`
+ * node: `brew install nvm`, setup nvm, `nvm install 5`
+ * python virtualenv: `pip install virtualenv`
+
+Initial setup:
+
+    cd steam_friends
+
+    cp env.example env.development
+    $EDITOR env.development
+
     virtualenv env
-    . env/bin/activate
+    . env.development
     pip install --upgrade pip
     pip install -r requirements-dev.txt
-    export PATH=$(pwd)/static/node_modules/.bin:$PATH
-    cd static
+    pushd steam_friends/static
     npm install && bower install
+    popd
 
-Before Developing::
+Before Developing:
 
-    export PATH=$(pwd)/static/node_modules/.bin:$PATH
-    . env/bin/activate
+    cd steam_friends
+    . env.development
     pip install -r requirements-dev.txt
 
-Build the static files::
+Build the static files:
 
-    cd static
+    cd steam_friends/static
     grunt
 
-Start the cache/queue server::
+    ctrl+c to exit
+
+Start the cache/queue server:
 
     redis-server --port 10002
 
-Run the development async workers::
+    ctrl+c to exit
+
+Run the development async workers (optional)::
 
     ./cli.py celery
+
+    ctrl+c to exit
 
 Run the development server::
 
     ./cli.py http
 
-Soon: Use uwsgi to start all of the above::
-
-    uwsgi dev.ini
+    ctrl+c to exit
 
 View the development server::
 
@@ -55,9 +71,7 @@ Testing
 
 Setup the python tests::
 
-    virtualenv env
-    . env/bin/activate
-    pip install -r requirements-tests.txt
+    env/bin/pip install -r requirements-tests.txt
 
 Run the python tests::
 
@@ -65,31 +79,37 @@ Run the python tests::
 
 Recording new HTTP fixtures::
 
-    STEAM_FRIENDS_TEST_RECORD_HTTP=once ./test.sh
+    . env.development
+    SF_TEST_RECORD_HTTP=once ./test.sh
 
 Re-recording all HTTP fixtures::
 
-    STEAM_FRIENDS_TEST_RECORD_HTTP=all ./test.sh
+    . env.development
+    SF_TEST_RECORD_HTTP=all ./test.sh
 
 Production
 ----------
 
 Setup nginx to uwsgi_pass to port 10000
 
-Setup the production app::
+Setup the production app:
 
     virtualenv env
     env/bin/pip install -r requirements-prod.txt
+    pushd steam_friends/static
+    npm install && bower install
+    popd
 
-Run the production async workers::
+Run the production async workers:
 
+    . env.prod
     ./cli.py --env prod celery
 
-Run the production app::
+Run the production app:
 
     uwsgi prod.ini
 
-Run the production app on FreeBSD::
+Run the production app on FreeBSD:
 
     SSL_CERT_FILE=/usr/local/share/certs/ca-root-nss.crt uwsgi prod.ini
 
@@ -118,3 +138,6 @@ Todo
 * Handle Caching be unavailable
 * Rate-limiting
 * Better CSS than Bootstrap
+* move node_modules and friends out of the static dir and into the root. then change grunt to build into our static dir
+* fix tests so that they don't depend on actually hitting the API so that we leak steam api keys in our vcrpy fixtures
+* Make `uwsgi dev.ini` start redis, celery, and flask with reloading when the code changes
