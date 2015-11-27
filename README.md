@@ -47,19 +47,19 @@ Start the cache/queue server:
 
     ctrl+c to exit
 
-Run the development async workers (optional)::
+Run the development async workers (optional):
 
     ./cli.py celery
 
     ctrl+c to exit
 
-Run the development server::
+Run the development server:
 
     ./cli.py http
 
     ctrl+c to exit
 
-View the development server::
+View the development server:
 
     open http://127.0.0.1:10000/
     open http://127.0.0.1:10000/api/steam_app/239140?with_details=1
@@ -69,20 +69,20 @@ View the development server::
 Testing
 ----------
 
-Setup the python tests::
+Setup the python tests:
 
     env/bin/pip install -r requirements-tests.txt
 
-Run the python tests::
+Run the python tests:
 
     ./test.sh
 
-Recording new HTTP fixtures::
+Recording new HTTP fixtures:
 
     . env.dev
     SF_TEST_RECORD_HTTP=once ./test.sh
 
-Re-recording all HTTP fixtures::
+Re-recording all HTTP fixtures:
 
     . env.dev
     SF_TEST_RECORD_HTTP=all ./test.sh
