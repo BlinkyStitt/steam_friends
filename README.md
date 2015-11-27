@@ -17,11 +17,11 @@ Initial setup:
 
     cd steam_friends
 
-    cp env.example env.development
-    $EDITOR env.development
+    cp env.example env.dev
+    $EDITOR env.dev
 
     virtualenv env
-    . env.development
+    . env.dev
     pip install --upgrade pip
     pip install -r requirements-dev.txt
     pushd steam_friends/static
@@ -31,7 +31,7 @@ Initial setup:
 Before Developing:
 
     cd steam_friends
-    . env.development
+    . env.dev
     pip install -r requirements-dev.txt
 
 Build the static files:
@@ -79,12 +79,12 @@ Run the python tests::
 
 Recording new HTTP fixtures::
 
-    . env.development
+    . env.dev
     SF_TEST_RECORD_HTTP=once ./test.sh
 
 Re-recording all HTTP fixtures::
 
-    . env.development
+    . env.dev
     SF_TEST_RECORD_HTTP=all ./test.sh
 
 Production
