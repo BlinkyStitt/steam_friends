@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 import celery
 import celery.signals
@@ -78,6 +78,7 @@ class FlaskCelery(object):
 
                 # todo: also do celerybeat here
 
+        # normally, this is created at import time. we make it here since we don't have config at import time
         self.celery_app = celery_app = celery.Celery(app.import_name)
 
         celery_app.conf.update(config_data)
@@ -99,6 +100,8 @@ class FlaskCelery(object):
 
     def task(self, *args, **kwargs):
         """Add a task to celery with the given exchange/queue/routing_key.
+
+        This keeps us from creating the tasks at import time where our app config isn't available
 
         .. TODO:: use functools.wraps?
         """
@@ -124,6 +127,7 @@ class FlaskCelery(object):
     def get_task(self, name):
         # needed because we can't use the functions directly since we don't build celery app at import time
         if '.' not in name:
+            # todo: this seems like a bad default
             name = 'steam_friends.models.' + name
         return self.tasks[name]
 

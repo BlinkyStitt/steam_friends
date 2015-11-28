@@ -1,11 +1,6 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
-import logging
-
-
-log = logging.getLogger(__name__)
-
-
+# todo: make sure we exit if our config has this in it
 SECRET = RuntimeError('__SECRET__PUT_THIS_IN_YOUR_ENV__')
 
 

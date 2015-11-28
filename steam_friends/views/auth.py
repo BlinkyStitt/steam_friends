@@ -1,6 +1,7 @@
-import flask
+from __future__ import absolute_import, print_function
 
 from flask.ext import openid
+import flask
 
 from steam_friends import ext, models
 

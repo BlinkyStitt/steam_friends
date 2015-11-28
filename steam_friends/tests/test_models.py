@@ -1,3 +1,5 @@
+from __future__ import absolute_import, print_function
+
 import pytest
 
 from steam_friends import models
@@ -44,8 +46,8 @@ def test_steam_app(flask_app):
             img_icon_url='img_icon_url1',
         )
 
-        print "appid0:", repr(appid0)
-        print "appid1:", repr(appid1)
+        print("appid0:", repr(appid0))
+        print("appid1:", repr(appid1))
 
         assert appid0 == appid0
         assert appid0 < appid1
