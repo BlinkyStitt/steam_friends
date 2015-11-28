@@ -125,19 +125,19 @@ propert user.
 Todo
 ----
 
+* More comments
+* More tests
+* Pretty frontend
 * Better handle cache being unavailable
 * Cost of the games
 * Links to buy the games that not everyone has
-* Show gift copies of games
+* Show gift copies of games if you own any
 * Better definition of display name vs steamid vs steamid64.
 * Online/offline icons for all the players
-* Have a button to auth with steam so we can fetch their userid without them looking it up
 * Show friends lists for all the queried users with check boxes to add the friends without having to type any names or look up any 64-bit ids
 * Only include actually installed games. I’m not sure this is possible
 * Filesize of the games
-* Handle Caching be unavailable
-* Rate-limiting
+* Rate-limiting steam API requests
 * Better CSS than Bootstrap
 * move node_modules and friends out of the static dir and into the root. then change grunt to build into our static dir
-* fix tests so that they don't depend on actually hitting the API so that we leak steam api keys in our vcrpy fixtures
 * Make `uwsgi dev.ini` start redis, celery, and flask with reloading when the code changes
