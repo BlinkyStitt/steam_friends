@@ -15,7 +15,7 @@ def test_app(flask_app):
 
 def test_app_more_config(monkeypatch):
     key = "TEST_ENV_VAR"
-    envvar = "STEAM_FRIENDS_{}".format(key)
+    envvar = "SF_{}".format(key)
     value = "False"
 
     monkeypatch.setenv(envvar, value)
@@ -26,11 +26,7 @@ def test_app_more_config(monkeypatch):
 
 
 def test_debug_app(monkeypatch):
-    key = "DEBUG"
-    envvar = "STEAM_FRIENDS_{}".format(key)
-    value = "True"
-
-    monkeypatch.setenv(envvar, value)
+    monkeypatch.setenv("SF_DEBUG", "True")
 
     flask_app = app.create_app(app_env="test")
 
@@ -38,7 +34,7 @@ def test_debug_app(monkeypatch):
 
 
 def test_bad_app(monkeypatch):
-    monkeypatch.setenv("STEAM_FRIENDS_ENV", "")
+    monkeypatch.setenv("SF_ENV", "")
 
     with pytest.raises(SystemExit):
         app.create_app()
