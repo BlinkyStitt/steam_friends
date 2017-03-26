@@ -15,7 +15,7 @@
   <a class="btn btn-default" href="{{ url_for('auth.logout') }}">Logout {{ g.steam_user }}</a>
 {% endif %}
 
-<p>This was really just a quick prototype. If someone wants to help me make a useful UI for this that makes adding your friends with a nice point and click interface, open an issue or pull request on <a href="https://github.com/WyseNynja/steam_friends">GitHub</a>.</p>
+<p>This was really just a quick prototype. If you want to help make a better UI for this, please open an issue or pull request on <a href="https://github.com/WyseNynja/steam_friends">GitHub</a>.</p>
 
 <form method="GET">
   <textarea class="form-control" name="ids_and_names" placeholder="Space-separated list of steamids (the profile name on steamcommunity.com, not the login or display name) or steamid64s" rows="2">{{ passed_ids }}</textarea>
