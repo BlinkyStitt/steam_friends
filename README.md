@@ -140,4 +140,5 @@ Todo
 * Rate-limiting steam API requests
 * Better CSS than Bootstrap
 * move node_modules and friends out of the static dir and into the root. then change grunt to build into our static dir
-* Make `uwsgi dev.ini` start redis, celery, and flask with reloading when the code changes
+* Use pip-compile for requirements
+* Document Docker
