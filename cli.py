@@ -27,9 +27,13 @@ def cli(ctx, env):
     )
 
     logging.basicConfig(stream=sys.stderr, level=logging.DEBUG, format=debug_log_format)
+
+    # TODO: set levels differently for different environments
+
     logging.getLogger('celery').setLevel(logging.WARNING)
     logging.getLogger('requests').setLevel(logging.WARNING)
     logging.getLogger('werkzeug').setLevel(logging.WARNING)
+    logging.getLogger('flask').setLevel(logging.INFO)
 
     ctx.obj = app.create_app(app_env=env)
 

@@ -1,0 +1,10 @@
+.cache/
+.git/
+data/
+env/
+*.egg-info
+*.pyc
+
+# TODO: put the node site outside /static and change the build scripts to put stuff in here smartly
+steam_friends/static/node_modules
+steam_friends/static/bower_components

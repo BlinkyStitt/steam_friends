@@ -5,12 +5,12 @@ SECRET = RuntimeError('__SECRET__PUT_THIS_IN_YOUR_ENV__')
 
 
 class Config(object):
-    BROKER_URL = 'redis://localhost:10002/1'  # celery queue
+    BROKER_URL = 'redis://redis:6379/1'  # celery queue
     CELERYD_HIJACK_ROOT_LOGGER = False
     DEBUG = False
     LOGGER_NAME = 'flask'
-    OPENID_FS_STORE_PATH = "/tmp/steam_friends/openid"
-    REDIS_URL = "redis://localhost:10002/0"  # caching
+    OPENID_FS_STORE_PATH = "/src/data/openid"
+    REDIS_URL = "redis://redis:6379/0"  # caching
     SECRET_KEY = "not very secret"
     STEAM_API_KEY = SECRET
     TESTING = False

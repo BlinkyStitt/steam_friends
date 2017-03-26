@@ -1,6 +1,4 @@
-"""
-this file is used to run the flask application in production
-"""
+"""this file is used to run the flask application in production."""
 from __future__ import absolute_import
 
 import logging
@@ -14,6 +12,7 @@ log_format = '%(asctime)s - %(levelname)s - %(name)s: %(message)s'
 
 # configure logging before we do anything
 logging.basicConfig(stream=sys.stdout, level=logging.INFO, format=log_format)
+logging.getLogger('flask').setLevel(logging.WARNING)
 logging.getLogger('werkzeug').setLevel(logging.WARNING)
 
 # uwsgi expects "application" by default

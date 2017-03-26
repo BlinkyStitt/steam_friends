@@ -3,7 +3,7 @@ from __future__ import absolute_import, print_function
 import os
 import sys
 
-from flask.ext import debugtoolbar
+import flask_debugtoolbar
 import celery
 import flask
 
@@ -66,11 +66,12 @@ def create_app(app_env=None):
 
     # setup application wide error handlers
     # other error handlers should be attached to their respective blueprints
-    app.error_handler_spec[None][500] = main.internal_error
+    # TODO: i think new flask changed this
+#    app.error_handler_spec[None][500] = main.internal_error
 
     # dev only things go here
     if app.debug:
-        debugtoolbar.DebugToolbarExtension(app)
+        flask_debugtoolbar.DebugToolbarExtension(app)
 
     # delete flask's default handlers. https://github.com/mitsuhiko/flask/issues/641
     # we configure our own logging when we want it
